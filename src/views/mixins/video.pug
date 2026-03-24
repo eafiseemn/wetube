@@ -1,0 +1,10 @@
+mixin video(item)
+  div
+    h4
+      a(href=`/video/${item.id}`)=item.title 
+    p=item.description
+    each hashtag in item.hashtags
+      kbd=hashtag
+      span  
+    small=item.createdAt
+    hr

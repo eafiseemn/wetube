@@ -1,0 +1,9 @@
+extends layout
+include mixins/error
+
+block content
+  h2 Oops, Page Not Found!
+  if errorMsg 
+    +error(errorMsg)
+  button.outline
+    a(href="/") Go Back to Home
