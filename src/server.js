@@ -10,6 +10,9 @@ const app = express();
 const logger = morgan("dev");
 app.use(logger);
 
+// Frontend Middleware
+app.use("/static", express.static("src/client"));
+
 // Form Middleware
 app.use(express.urlencoded({ extended: true }));
 

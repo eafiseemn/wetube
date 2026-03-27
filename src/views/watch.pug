@@ -1,3 +1,11 @@
 extends layout.pug
 block content
-  h1 Watch Video #{videoId}
+  article 
+    p=video.description
+    each hashtag in video.hashtags
+      kbd=hashtag
+      span  
+    small #{video.updatedAt ? video.updatedAt + " Updated" : video.createdAt + " Created" }
+  div.grid
+    a(href=`${video.id}/edit` class="secondary") Edit Video &rarr;
+    a(href=`${video.id}/remove` class="secondary") Delete Video &rarr;

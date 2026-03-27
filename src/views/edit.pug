@@ -1,3 +1,14 @@
 extends layout 
 block content
-  h4 Change Title of Video
+  h4 Update Video 
+  if errorMsg 
+    +error(errorMsg)
+  form(method="post")
+    label(for="title") Title
+    input(placeholder="Video Title", type="text", required, name="title", maxlength=80, value=video.title)
+    label(for="description") Description
+    textarea(placeholder="Video Description", required, name="description", minlength=20)=video.description
+    label(for="hashtags") Hashtags (Separate multiple values with a comma)
+    input(placeholder="Hashtags", type="text", required, name="hashtags", value=video.hashtags.map(tag => tag.slice(1)).join(", "))
+    button(type="submit") Edit Video!
+    input(type="button" class="pico-background-red-500 cancelEditBtn" style={"border": "none"} value="Cancel")
