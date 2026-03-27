@@ -6,5 +6,5 @@ mixin video(item)
     each hashtag in item.hashtags
       kbd=hashtag
       span  
-    small #{item.updatedAt ? item.updatedAt + " Updated" : item.createdAt + " Created" }
+    small=item.formattedDate
     hr

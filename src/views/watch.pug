@@ -5,7 +5,7 @@ block content
     each hashtag in video.hashtags
       kbd=hashtag
       span  
-    small #{video.updatedAt ? video.updatedAt + " Updated" : video.createdAt + " Created" }
+    small=video.formattedDate
   div.grid
     a(href=`${video.id}/edit` class="secondary") Edit Video &rarr;
     a(href=`${video.id}/remove` class="secondary") Delete Video &rarr;
