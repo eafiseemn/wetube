@@ -8,4 +8,4 @@ block content
     small=video.formattedDate
   div.grid
     a(href=`${video.id}/edit` class="secondary") Edit Video &rarr;
-    a(href=`${video.id}/remove` class="secondary") Delete Video &rarr;
+    a.deleteVideo(href=`${video.id}/remove` class="secondary") Delete Video &rarr;

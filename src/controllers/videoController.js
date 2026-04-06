@@ -97,4 +97,13 @@ export const postEdit = async (req, res) => {
 	}
 };
 
-export const remove = (req, res) => res.send("Remove Video");
+export const remove = async (req, res) => {
+	const { id } = req.params;
+	try {
+		await Video.findByIdAndDelete(id);
+		return res.redirect("/");
+	} catch (err) {
+		console.error(err._message);
+		return res.redirect(`/videos/${id}`);
+	}
+};
