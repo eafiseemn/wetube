@@ -9,7 +9,23 @@ export const home = async (req, res) => {
 		return res.status(500).render("404", { pageTitle: "Server Error", errorMsg: "Server Error" });
 	}
 };
-export const search = (req, res) => res.send("Search Videos");
+export const search = async (req, res) => {
+	const { keyword } = req.query;
+	let videos = [];
+	if (keyword) {
+		try {
+			videos = await Video.find({
+				title: { $regex: new RegExp(keyword, "i") },
+			});
+		} catch (err) {
+			console.error(err._message);
+			return res
+				.status(500)
+				.render("404", { pageTitle: "Server Error", errorMsg: "Something's Wrong!" });
+		}
+	}
+	return res.render("search", { pageTitle: "Search", keyword, videos });
+};
 export const watch = async (req, res) => {
 	const { id } = req.params;
 	if (!regexId.test(id)) {
