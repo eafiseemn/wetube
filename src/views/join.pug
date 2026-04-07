@@ -1,0 +1,19 @@
+extends layout 
+include mixins/error
+
+block content
+  if errMsg 
+    +error(errMsg)
+  
+  form(method="POST")
+    label(for="username") Username
+    input(name="username", type="text", required, placeholder="Username", value=oldData? oldData.username : "")
+    label(for="emain") Email 
+    input(name="email", type="email", required, placeholder="Email Address", value=oldData? oldData.email : "")
+    label(for="password") Password 
+    input(name="password", type="password", required, placeholder="Password")
+    label(for="passwordConfirm") Password Confirm
+    input(name="passwordConfirm", type="password", required, placeholder="Password Confirm")
+    label(for="location") Location 
+    input(name="location", type="text", placeholder="Location", value=oldData? oldData.location : "")
+    button(type="submit") Create Account
