@@ -8,7 +8,7 @@ export const postJoin = async (req, res) => {
 	if (password !== passwordConfirm) {
 		return res.status(400).render("join", {
 			pageTitle,
-			errMsg: "Passwords do not match. Please try again.",
+			errorMsg: "Passwords do not match. Please try again.",
 			oldData: {
 				username,
 				email,
@@ -22,13 +22,13 @@ export const postJoin = async (req, res) => {
 			"email username",
 		);
 		if (userExists) {
-			const errMsg =
+			const errorMsg =
 				userExists.email === email
 					? "This email is already registered."
 					: "This username is already taken.";
 			return res.status(400).render("join", {
 				pageTitle,
-				errMsg,
+				errorMsg,
 				oldData: {
 					username,
 					email,
@@ -43,7 +43,7 @@ export const postJoin = async (req, res) => {
 		console.error("Join Error: ", err);
 		return res
 			.status(500)
-			.render("join", { pageTitle, errMsg: "Internal Server Error. Please try again later." });
+			.render("join", { pageTitle, errorMsg: "Internal Server Error. Please try again later." });
 	}
 };
 export const login = (req, res) => res.send("Login");

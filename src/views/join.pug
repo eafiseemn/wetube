@@ -2,8 +2,8 @@ extends layout
 include mixins/error
 
 block content
-  if errMsg 
-    +error(errMsg)
+  if errorMsg 
+    +error(errorMsg)
   
   form(method="POST")
     label(for="username") Username
