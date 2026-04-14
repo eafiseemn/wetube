@@ -1,8 +1,10 @@
 import express from "express";
 import morgan from "morgan";
+import session from "express-session";
 import rootRouter from "./routers/rootRouter";
 import videoRouter from "./routers/videoRouter";
 import userRouter from "./routers/userRouter";
+import { localsMiddleware } from "./middlewares";
 
 const app = express();
 
@@ -19,6 +21,17 @@ app.use(express.urlencoded({ extended: true }));
 // Html Renderer
 app.set("view engine", "pug");
 app.set("views", process.cwd() + "/src/views");
+
+// Session Middleware
+app.use(
+	session({
+		secret: process.env.COOKIE_SECRET,
+		resave: false,
+		saveUninitialized: true,
+	}),
+);
+
+app.use(localsMiddleware);
 
 // Router Settings
 app.use("/", rootRouter);
