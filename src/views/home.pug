@@ -2,6 +2,9 @@ extends layout
 include mixins/video
 
 block content
+  if user
+    article.pico-background-violet-100
+      strong Hello, #{user.username}! Welcome 🤗
   each video in videos
     +video(video)
   else
