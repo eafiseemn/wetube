@@ -58,7 +58,7 @@ export const postLogin = async (req, res) => {
 	const pageTitle = "Login";
 	try {
 		// Check if account exists
-		const user = await User.findOne({ username });
+		const user = await User.findOne({ username, socialOnly: false });
 		if (!user) {
 			return res
 				.status(400)
@@ -99,13 +99,17 @@ export const startGithubLogin = (req, res) => {
 };
 
 export const finishGithubLogin = async (req, res) => {
+	const pageTitle = "Login";
 	try {
+		const { code } = req.query;
+		if (!code) throw new Error("No code provided from GitHub");
+
 		// request access token
 		const baseUrl = "https://github.com/login/oauth/access_token";
 		const config = {
 			client_id: process.env.GITHUB_CLIENT,
 			client_secret: process.env.GITHUB_SECRET,
-			code: req.query.code,
+			code,
 		};
 		const params = new URLSearchParams(config).toString();
 		const finalUrl = baseUrl + "?" + params;
@@ -113,55 +117,66 @@ export const finishGithubLogin = async (req, res) => {
 			method: "POST",
 			headers: {
 				Accept: "application/json",
+				"Content-Type": "application/json",
 			},
 		});
 		const tokenRequest = await data.json();
 
-		// fetch user information
-		if ("access_token" in tokenRequest) {
-			const accessToken = tokenRequest["access_token"];
-			const apiUrl = "https://api.github.com/user";
-			const headers = {
-				Authorization: `token ${accessToken}`,
-			};
-			const userData = await (await fetch(apiUrl, { headers })).json();
-			const emailData = await (await fetch(`${apiUrl}/emails`, { headers })).json();
-			const emailObj = emailData.find((email) => email.primary === true && email.verified === true);
-
-			if (!emailObj) {
-				return res.status(400).render("login", {
-					pageTitle,
-					errorMsg: "Can't verify Email connected to your GitHub Account.",
-				});
-			}
-
-			// Check if there's user having a same email account
-			let user = await User.findOne({ email: emailObj.email });
-			if (!user) {
-				// Create new User if there's no registered user
-				user = await User.create({
-					username: userData.login,
-					email: emailObj.email,
-					password: "",
-					avatarUrl: userData.avatar_url,
-					socialOnly: true,
-					location: userData.location,
-				});
-			}
-			req.session.loggedIn = true;
-			req.session.user = user.toObject();
-			return res.redirect("/");
-		} else {
-			console.error("Github Token Error");
-			return res.status(500).render("login", {
-				pageTitle: "Login",
-				errorMsg: "Internal Server Error. Please try again later.",
+		if (!tokenRequest.access_token) {
+			console.error("GitHub Token Error");
+			return res.status(400).render("login", {
+				pageTitle,
+				errorMsg: "Failed to Authenticate through GitHub.",
 			});
 		}
+
+		// fetch user information
+		const apiUrl = "https://api.github.com";
+		const headers = {
+			Authorization: `token ${tokenRequest.access_token}`,
+		};
+		const [userFetch, emailFetch] = await Promise.all([
+			fetch(`${apiUrl}/user`, { headers }),
+			fetch(`${apiUrl}/user/email`, { headers }),
+		]);
+		const userData = await userFetch.json();
+		const emailData = await emailFetch.json();
+
+		if (!userData.login) {
+			return res.status(500).render("login", {
+				pageTitle,
+				errorMsg: "Unable to load GitHub account information.",
+			});
+		}
+		// Check for the Email verification
+		const emailObj = emailData.find((email) => email.primary === true && email.verified === true);
+		if (!emailObj) {
+			return res.status(400).render("login", {
+				pageTitle,
+				errorMsg: "Can't find verified Email connected to your GitHub Account.",
+			});
+		}
+
+		// Check if there's user having a same email account
+		let user = await User.findOne({ email: emailObj.email });
+		if (!user) {
+			// Create new User if there's no registered user
+			user = await User.create({
+				username: userData.login,
+				email: emailObj.email,
+				password: "",
+				avatarUrl: userData.avatar_url,
+				socialOnly: true,
+				location: userData.location,
+			});
+		}
+		req.session.loggedIn = true;
+		req.session.user = user.toObject();
+		return res.redirect("/");
 	} catch (err) {
 		console.error("Github Login Error", err);
 		return res.status(500).render("login", {
-			pageTitle: "Login",
+			pageTitle,
 			errorMsg: "Internal Server Error. Please try again later.",
 		});
 	}
