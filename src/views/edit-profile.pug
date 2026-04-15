@@ -1,0 +1,16 @@
+extends layout
+include mixins/error
+
+block content 
+  if errorMsg 
+    +error(errorMsg)
+
+  form(method="POST")
+    label(for="username") Username
+    input(name="username", type="text", required, placeholder="Username", value=oldData ? oldData.username :loggedInUser.username)
+    label(for="emain") Email 
+    input(name="email", type="email", required, placeholder="Email Address", value=oldData ? oldData.email :loggedInUser.email)
+    label(for="location") Location 
+    input(name="location", type="text", placeholder="Location", value=oldData ? oldData.location :loggedInUser.location)
+    button(type="submit") Update Profile
+    input(type="button" class="pico-background-red-500 cancelEditBtn" style={"border": "none"} value="Cancel")

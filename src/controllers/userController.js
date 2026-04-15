@@ -67,9 +67,11 @@ export const postLogin = async (req, res) => {
 		// Check if password is correct
 		const passwordCorrect = await bcrypt.compare(password, user.password);
 		if (!passwordCorrect) {
-			return res
-				.status(400)
-				.render("login", { pageTitle, errorMsg: "Wrong password. Please try again." });
+			return res.status(400).render("login", {
+				pageTitle,
+				errorMsg: "Wrong password. Please try again.",
+				oldData: { username },
+			});
 		}
 		// Login Success
 		req.session.loggedIn = true;
@@ -137,10 +139,11 @@ export const finishGithubLogin = async (req, res) => {
 		};
 		const [userFetch, emailFetch] = await Promise.all([
 			fetch(`${apiUrl}/user`, { headers }),
-			fetch(`${apiUrl}/user/email`, { headers }),
+			fetch(`${apiUrl}/user/emails`, { headers }),
 		]);
 		const userData = await userFetch.json();
 		const emailData = await emailFetch.json();
+		console.log(emailData);
 
 		if (!userData.login) {
 			return res.status(500).render("login", {
@@ -183,11 +186,61 @@ export const finishGithubLogin = async (req, res) => {
 };
 
 /************** Log Out **************/
+
 export const logout = (req, res) => {
 	req.session.destroy();
 	return res.redirect("/");
 };
 
+/************** Update Profile **************/
+
+export const getEdit = (req, res) => res.render("edit-profile", { pageTitle: "Edit Profile" });
+export const postEdit = async (req, res) => {
+	const pageTitle = "Edit Profile";
+	const {
+		session: {
+			user: { _id: id, username: oldUsername, email: oldEmail, location: oldLocation },
+		},
+		body: { username, email, location },
+	} = req;
+
+	if (username === oldUsername && email === oldEmail && location === oldLocation) {
+		return res.status(400).render("edit-profile", { pageTitle, errorMsg: "No changes were made." });
+	}
+
+	try {
+		// Check for Duplicate Account
+		let errorMsg;
+		if (username !== oldUsername && (await User.exists({ username }))) {
+			errorMsg = "This username is already taken.";
+		}
+		if (email !== oldEmail && (await User.exists({ email }))) {
+			errorMsg = "This email is already registered.";
+		}
+		if (errorMsg) {
+			return res.status(400).render("edit-profile", {
+				pageTitle,
+				errorMsg,
+				oldData: { ...req.body },
+			});
+		}
+
+		// Update Account
+		const updatedUser = await User.findByIdAndUpdate(
+			id,
+			{ username, email, location },
+			{ returnDocument: "after" },
+		).lean();
+		req.session.user = updatedUser;
+		return res.redirect("/users/edit");
+	} catch (err) {
+		console.error("Profile Update Error: ", err);
+		return res.status(500).render("edit-profile", {
+			pageTitle,
+			errorMsg: "Something went wrong. Please try again later.",
+		});
+	}
+};
+
 export const profile = (req, res) => res.send("See Profile");
-export const edit = (req, res) => res.send("Edit Profile");
 export const remove = (req, res) => res.send("Delete Profile");

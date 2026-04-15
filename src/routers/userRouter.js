@@ -5,6 +5,8 @@ import {
 	logout,
 	startGithubLogin,
 	finishGithubLogin,
+	getEdit,
+	postEdit,
 } from "../controllers/userController";
 
 const userRouter = express.Router();
@@ -12,7 +14,7 @@ const userRouter = express.Router();
 userRouter.get("/github/start", startGithubLogin);
 userRouter.get("/github/finish", finishGithubLogin);
 userRouter.get("/logout", logout);
-userRouter.get("/edit", edit);
+userRouter.route("/edit").get(getEdit).post(postEdit);
 userRouter.get("/:id", profile);
 
 export default userRouter;
