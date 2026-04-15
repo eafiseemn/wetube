@@ -6,3 +6,12 @@ export const localsMiddleware = (req, res, next) => {
 	}
 	next();
 };
+
+export const userOnlyMiddleware = (req, res, next) => {
+	if (req.session.loggedIn) return next();
+	else return res.redirect("/login");
+};
+export const publicOnlyMiddleware = (req, res, next) => {
+	if (!req.session.loggedIn) return next();
+	else return res.redirect("/");
+};
