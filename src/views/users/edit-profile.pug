@@ -5,13 +5,20 @@ block content
   if errorMsg 
     +error(errorMsg)
 
-  form(method="POST")
-    label(for="username") Username
-    input(id="username", name="username", type="text", required, placeholder="Username", value=oldData ? oldData.username :loggedInUser.username)
-    label(for="email") Email 
-    input(id="email", name="email", type="email", required, placeholder="Email Address", value=oldData ? oldData.email :loggedInUser.email)
-    label(for="location") Location 
-    input(id="location", name="location", type="text", placeholder="Location", value=oldData ? oldData.location :loggedInUser.location)
+  form(method="POST", enctype="multipart/form-data")
+    div.grid
+      div
+        label(for="username") Username
+        input(id="username", name="username", type="text", required, placeholder="Username", value=oldData ? oldData.username :loggedInUser.username)
+        label(for="email") Email 
+        input(id="email", name="email", type="email", required, placeholder="Email Address", value=oldData ? oldData.email :loggedInUser.email)
+        label(for="location") Location 
+        input(id="location", name="location", type="text", placeholder="Location", value=oldData ? oldData.location :loggedInUser.location)
+      div
+        if loggedInUser.avatarUrl 
+          img(src=loggedInUser.avatarUrl.startsWith("http") ? loggedInUser.avatarUrl : `/${loggedInUser.avatarUrl}`, height="100", width="100")
+        label(for="avatar") Avatar
+        input(id="avatar", name="avatar", type="file", accept="image/*")
     button(type="submit") Update Profile
     input(type="button" class="pico-background-red-500 cancelEditBtn" style={"border": "none"} value="Cancel")
   

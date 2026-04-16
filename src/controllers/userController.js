@@ -203,12 +203,19 @@ export const postEdit = async (req, res) => {
 	const pageTitle = "Edit Profile";
 	const {
 		session: {
-			user: { _id: id, username: oldUsername, email: oldEmail, location: oldLocation },
+			user: {
+				_id: id,
+				username: oldUsername,
+				email: oldEmail,
+				location: oldLocation,
+				avatarUrl: oldAvatarUrl,
+			},
 		},
 		body: { username, email, location },
+		file,
 	} = req;
 
-	if (username === oldUsername && email === oldEmail && location === oldLocation) {
+	if (username === oldUsername && email === oldEmail && location === oldLocation && !file) {
 		return res
 			.status(400)
 			.render("users/edit-profile", { pageTitle, errorMsg: "No changes were made." });
@@ -234,7 +241,7 @@ export const postEdit = async (req, res) => {
 		// Update Account
 		const updatedUser = await User.findByIdAndUpdate(
 			id,
-			{ username, email, location },
+			{ username, email, location, avatarUrl: file ? file.path : oldAvatarUrl },
 			{ returnDocument: "after" },
 		).lean();
 		req.session.user = updatedUser;
