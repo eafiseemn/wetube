@@ -1,0 +1,15 @@
+extends ../layout
+include ../mixins/error
+
+block content 
+  if errorMsg 
+    +error(errorMsg)
+  form(method="post")
+    label(for="title") Title
+    input(id="title", placeholder="Video Title", type="text", required, name="title", maxlength=80)
+    label(for="description") Description
+    textarea(id="description", placeholder="Video Description", required, name="description", minlength=20)
+    label(for="hashtags") Hashtags (Separate multiple values with a comma)
+    input(id="hashtags", placeholder="Hashtags", type="text", required, name="hashtags")
+    button(type="submit") Upload Video!
+

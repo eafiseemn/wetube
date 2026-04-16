@@ -1,0 +1,25 @@
+extends ../layout 
+include ../mixins/error
+
+block content
+  if errorMsg 
+    +error(errorMsg)
+  
+  form(method="POST")
+    label(for="username") Username
+    input(id="username", name="username", type="text", required, placeholder="Username", value=oldData? oldData.username : "")
+    label(for="email") Email 
+    input(id="email", name="email", type="email", required, placeholder="Email Address", value=oldData? oldData.email : "")
+    label(for="password") Password 
+    input(id="password", name="password", type="password", required, placeholder="Password")
+    label(for="passwordConfirm") Password Confirm
+    input(id="passwordConfirm", name="passwordConfirm", type="password", required, placeholder="Password Confirm")
+    label(for="location") Location 
+    input(id="location", name="location", type="text", placeholder="Location", value=oldData? oldData.location : "")
+    button(type="submit") Create Account
+
+  hr
+  div
+    span(style={"display":"inline-block"}) Already has an account? 
+    strong 
+      a(href="/login") Log in now &rarr;

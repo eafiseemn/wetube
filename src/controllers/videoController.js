@@ -24,7 +24,7 @@ export const search = async (req, res) => {
 				.render("404", { pageTitle: "Server Error", errorMsg: "Something's Wrong!" });
 		}
 	}
-	return res.render("search", { pageTitle: "Search", keyword, videos });
+	return res.render("videos/search", { pageTitle: "Search", keyword, videos });
 };
 export const watch = async (req, res) => {
 	const { id } = req.params;
@@ -36,7 +36,7 @@ export const watch = async (req, res) => {
 	try {
 		const video = await Video.findById(id);
 		if (!video) throw new Error("No video found match to this ID");
-		return res.render("watch", { pageTitle: video.title, video });
+		return res.render("videos/watch", { pageTitle: video.title, video });
 	} catch (err) {
 		console.error(err.message);
 		return res
@@ -45,7 +45,8 @@ export const watch = async (req, res) => {
 	}
 };
 
-export const getUpload = (req, res) => res.render("upload", { pageTitle: "Upload New Video" });
+export const getUpload = (req, res) =>
+	res.render("videos/upload", { pageTitle: "Upload New Video" });
 export const postUpload = async (req, res) => {
 	const { title, description, hashtags } = req.body;
 	try {
@@ -57,7 +58,7 @@ export const postUpload = async (req, res) => {
 		return res.redirect("/");
 	} catch (err) {
 		console.error(err);
-		return res.render("upload", { pageTitle: "Upload New Video", errorMsg: err._message });
+		return res.render("videos/upload", { pageTitle: "Upload New Video", errorMsg: err._message });
 	}
 };
 
@@ -75,7 +76,7 @@ export const getEdit = async (req, res) => {
 				.status(404)
 				.render("404", { pageTitle: "Page Not Found", errorMsg: "Cannot Find Video" });
 		}
-		return res.render("edit", { pageTitle: `Edit ${video.title}`, video });
+		return res.render("videos/edit", { pageTitle: `Edit ${video.title}`, video });
 	} catch (err) {
 		console.error("DB Error:", err.message);
 		return res.redirect("/");
@@ -105,7 +106,7 @@ export const postEdit = async (req, res) => {
 		return res.redirect(`/videos/${id}`);
 	} catch (err) {
 		console.error(err.message);
-		return res.status(500).render("edit", {
+		return res.status(500).render("videos/edit", {
 			pageTitle: "Edit Video",
 			video: { title, description, hashtags, _id: id },
 			errorMsg: "Something Went Wrong... Please Try Again!",

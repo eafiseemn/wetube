@@ -3,13 +3,13 @@ import bcrypt from "bcrypt";
 
 /************** Join **************/
 
-export const getJoin = (req, res) => res.render("join", { pageTitle: "Create Account" });
+export const getJoin = (req, res) => res.render("users/join", { pageTitle: "Create Account" });
 export const postJoin = async (req, res) => {
 	const { username, email, password, passwordConfirm, location } = req.body;
 	const pageTitle = "Create Account";
 	// Password Confirm
 	if (password !== passwordConfirm) {
-		return res.status(400).render("join", {
+		return res.status(400).render("users/join", {
 			pageTitle,
 			errorMsg: "Passwords do not match. Please try again.",
 			oldData: {
@@ -29,7 +29,7 @@ export const postJoin = async (req, res) => {
 				userExists.email === email
 					? "This email is already registered."
 					: "This username is already taken.";
-			return res.status(400).render("join", {
+			return res.status(400).render("users/join", {
 				pageTitle,
 				errorMsg,
 				oldData: {
@@ -44,15 +44,16 @@ export const postJoin = async (req, res) => {
 		return res.redirect("/login");
 	} catch (err) {
 		console.error("Join Error: ", err);
-		return res
-			.status(500)
-			.render("join", { pageTitle, errorMsg: "Internal Server Error. Please try again later." });
+		return res.status(500).render("users/join", {
+			pageTitle,
+			errorMsg: "Internal Server Error. Please try again later.",
+		});
 	}
 };
 
 /************** LogIn **************/
 
-export const getLogin = (req, res) => res.render("login", { pageTitle: "Login" });
+export const getLogin = (req, res) => res.render("users/login", { pageTitle: "Login" });
 export const postLogin = async (req, res) => {
 	const { username, password } = req.body;
 	const pageTitle = "Login";
@@ -60,14 +61,15 @@ export const postLogin = async (req, res) => {
 		// Check if account exists
 		const user = await User.findOne({ username, socialOnly: false });
 		if (!user) {
-			return res
-				.status(400)
-				.render("login", { pageTitle, errorMsg: "An account with this username does not exist." });
+			return res.status(400).render("users/login", {
+				pageTitle,
+				errorMsg: "An account with this username does not exist.",
+			});
 		}
 		// Check if password is correct
 		const passwordCorrect = await bcrypt.compare(password, user.password);
 		if (!passwordCorrect) {
-			return res.status(400).render("login", {
+			return res.status(400).render("users/login", {
 				pageTitle,
 				errorMsg: "Wrong password. Please try again.",
 				oldData: { username },
@@ -79,9 +81,10 @@ export const postLogin = async (req, res) => {
 		return res.redirect("/");
 	} catch (err) {
 		console.error("Login Error: ", err);
-		return res
-			.status(500)
-			.render("login", { pageTitle, errorMsg: "Internal Server Error. Please try again later." });
+		return res.status(500).render("users/login", {
+			pageTitle,
+			errorMsg: "Internal Server Error. Please try again later.",
+		});
 	}
 };
 
@@ -126,7 +129,7 @@ export const finishGithubLogin = async (req, res) => {
 
 		if (!tokenRequest.access_token) {
 			console.error("GitHub Token Error");
-			return res.status(400).render("login", {
+			return res.status(400).render("users/login", {
 				pageTitle,
 				errorMsg: "Failed to Authenticate through GitHub.",
 			});
@@ -146,7 +149,7 @@ export const finishGithubLogin = async (req, res) => {
 		console.log(emailData);
 
 		if (!userData.login) {
-			return res.status(500).render("login", {
+			return res.status(500).render("users/login", {
 				pageTitle,
 				errorMsg: "Unable to load GitHub account information.",
 			});
@@ -154,7 +157,7 @@ export const finishGithubLogin = async (req, res) => {
 		// Check for the Email verification
 		const emailObj = emailData.find((email) => email.primary === true && email.verified === true);
 		if (!emailObj) {
-			return res.status(400).render("login", {
+			return res.status(400).render("users/login", {
 				pageTitle,
 				errorMsg: "Can't find verified Email connected to your GitHub Account.",
 			});
@@ -178,7 +181,7 @@ export const finishGithubLogin = async (req, res) => {
 		return res.redirect("/");
 	} catch (err) {
 		console.error("Github Login Error", err);
-		return res.status(500).render("login", {
+		return res.status(500).render("users/login", {
 			pageTitle,
 			errorMsg: "Internal Server Error. Please try again later.",
 		});
@@ -189,12 +192,13 @@ export const finishGithubLogin = async (req, res) => {
 
 export const logout = (req, res) => {
 	req.session.destroy();
-	return res.redirect("/");
+	return res.redirect("/login");
 };
 
 /************** Update Profile **************/
 
-export const getEdit = (req, res) => res.render("edit-profile", { pageTitle: "Edit Profile" });
+export const getEdit = (req, res) =>
+	res.render("users/edit-profile", { pageTitle: "Edit Profile" });
 export const postEdit = async (req, res) => {
 	const pageTitle = "Edit Profile";
 	const {
@@ -205,7 +209,9 @@ export const postEdit = async (req, res) => {
 	} = req;
 
 	if (username === oldUsername && email === oldEmail && location === oldLocation) {
-		return res.status(400).render("edit-profile", { pageTitle, errorMsg: "No changes were made." });
+		return res
+			.status(400)
+			.render("users/edit-profile", { pageTitle, errorMsg: "No changes were made." });
 	}
 
 	try {
@@ -218,7 +224,7 @@ export const postEdit = async (req, res) => {
 			errorMsg = "This email is already registered.";
 		}
 		if (errorMsg) {
-			return res.status(400).render("edit-profile", {
+			return res.status(400).render("users/edit-profile", {
 				pageTitle,
 				errorMsg,
 				oldData: { ...req.body },
@@ -235,7 +241,55 @@ export const postEdit = async (req, res) => {
 		return res.redirect("/users/edit");
 	} catch (err) {
 		console.error("Profile Update Error: ", err);
-		return res.status(500).render("edit-profile", {
+		return res.status(500).render("users/edit-profile", {
+			pageTitle,
+			errorMsg: "Something went wrong. Please try again later.",
+		});
+	}
+};
+
+/************** Change Password **************/
+
+export const getChangePassword = (req, res) => {
+	if (req.session.user.socialOnly) return res.redirect("/");
+	return res.render("users/change-password", { pageTitle: "Change Password" });
+};
+export const postChangePassword = async (req, res) => {
+	const pageTitle = "Change Password";
+	const {
+		session: {
+			user: { _id },
+		},
+		body: { oldPassword, newPassword, newPasswordConfirm },
+	} = req;
+
+	// Check Password Confirm
+	if (newPassword !== newPasswordConfirm) {
+		return res.status(400).render("users/change-password", {
+			pageTitle,
+			errorMsg: "New passwords do not match. Please try again.",
+		});
+	}
+
+	try {
+		// Check if old password is correct
+		const user = await User.findById(_id);
+		const passwordCorrect = await bcrypt.compare(oldPassword, user.password);
+		console.log(passwordCorrect);
+		if (!passwordCorrect) {
+			return res.status(400).render("users/change-password", {
+				pageTitle,
+				errorMsg: "The current password is incorrect.",
+			});
+		}
+
+		// Update password
+		user.password = newPassword;
+		user.save();
+		return res.redirect("/users/logout");
+	} catch (err) {
+		console.error("Password Change Error: ", err);
+		return res.status(500).render("users/change-password", {
 			pageTitle,
 			errorMsg: "Something went wrong. Please try again later.",
 		});

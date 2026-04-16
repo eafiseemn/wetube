@@ -1,5 +1,5 @@
-extends layout 
-include mixins/error
+extends ../layout 
+include ../mixins/error
 
 block content
   if errorMsg 
@@ -7,9 +7,9 @@ block content
   
   form(method="POST")
     label(for="username") Username
-    input(name="username", type="text", required, placeholder="Username", value=oldData? oldData.username : "")
+    input(id="username", name="username", type="text", required, placeholder="Username", value=oldData? oldData.username : "")
     label(for="password") Password 
-    input(name="password", type="password", required, placeholder="Password")
+    input(id="password", name="password", type="password", required, placeholder="Password")
     button(type="submit") Login
 
   strong
