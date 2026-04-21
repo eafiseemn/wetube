@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 
 export const getJoin = (req, res) => res.render("users/join", { pageTitle: "Create Account" });
 export const postJoin = async (req, res) => {
-	const { username, email, password, passwordConfirm, location } = req.body;
+	const { username, nickname, email, password, passwordConfirm, location } = req.body;
 	const pageTitle = "Create Account";
 	// Password Confirm
 	if (password !== passwordConfirm) {
@@ -14,6 +14,7 @@ export const postJoin = async (req, res) => {
 			errorMsg: "Passwords do not match. Please try again.",
 			oldData: {
 				username,
+				nickname,
 				email,
 				location,
 			},
@@ -34,13 +35,21 @@ export const postJoin = async (req, res) => {
 				errorMsg,
 				oldData: {
 					username,
+					nickname,
 					email,
 					location,
 				},
 			});
 		}
 		// Create Account
-		await User.create({ username, email, password, location });
+		await User.create({
+			username,
+			nickname,
+			email,
+			password,
+			location,
+			avatarUrl: "uploads/avatar/5475dddc9eef38ed98de61d8ab471d23",
+		});
 		return res.redirect("/login");
 	} catch (err) {
 		console.error("Join Error: ", err);
@@ -146,7 +155,6 @@ export const finishGithubLogin = async (req, res) => {
 		]);
 		const userData = await userFetch.json();
 		const emailData = await emailFetch.json();
-		console.log(emailData);
 
 		if (!userData.login) {
 			return res.status(500).render("users/login", {
@@ -169,6 +177,7 @@ export const finishGithubLogin = async (req, res) => {
 			// Create new User if there's no registered user
 			user = await User.create({
 				username: userData.login,
+				nickname: userData.name,
 				email: emailObj.email,
 				password: "",
 				avatarUrl: userData.avatar_url,
@@ -206,16 +215,23 @@ export const postEdit = async (req, res) => {
 			user: {
 				_id: id,
 				username: oldUsername,
+				nickname: oldNickname,
 				email: oldEmail,
 				location: oldLocation,
 				avatarUrl: oldAvatarUrl,
 			},
 		},
-		body: { username, email, location },
+		body: { username, nickname, email, location },
 		file,
 	} = req;
 
-	if (username === oldUsername && email === oldEmail && location === oldLocation && !file) {
+	if (
+		username === oldUsername &&
+		nickname === oldNickname &&
+		email === oldEmail &&
+		location === oldLocation &&
+		!file
+	) {
 		return res
 			.status(400)
 			.render("users/edit-profile", { pageTitle, errorMsg: "No changes were made." });
@@ -241,7 +257,7 @@ export const postEdit = async (req, res) => {
 		// Update Account
 		const updatedUser = await User.findByIdAndUpdate(
 			id,
-			{ username, email, location, avatarUrl: file ? file.path : oldAvatarUrl },
+			{ username, nickname, email, location, avatarUrl: file ? file.path : oldAvatarUrl },
 			{ returnDocument: "after" },
 		).lean();
 		req.session.user = updatedUser;
@@ -282,7 +298,6 @@ export const postChangePassword = async (req, res) => {
 		// Check if old password is correct
 		const user = await User.findById(_id);
 		const passwordCorrect = await bcrypt.compare(oldPassword, user.password);
-		console.log(passwordCorrect);
 		if (!passwordCorrect) {
 			return res.status(400).render("users/change-password", {
 				pageTitle,
@@ -303,5 +318,22 @@ export const postChangePassword = async (req, res) => {
 	}
 };
 
-export const profile = (req, res) => res.send("See Profile");
-export const remove = (req, res) => res.send("Delete Profile");
+/************** See Profile **************/
+
+export const profile = async (req, res) => {
+	const { username } = req.params;
+	try {
+		const user = await User.findOne({ username }).populate("videos");
+		if (!user) {
+			return res.status(404).render("404", {
+				pageTitle: "User Not Found",
+				errorMsg: `Can't find username: ${username}`,
+			});
+		}
+
+		return res.render("users/profile", { pageTitle: `${user.nickname}'s Profile`, user });
+	} catch (err) {
+		console.error("User profile Load Error: ", err);
+		res.status(500).render("404", { pageTitle: "Error", errorMsg: "Internal Server Error" });
+	}
+};

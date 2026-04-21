@@ -4,7 +4,7 @@ include mixins/video
 block content
   if loggedInUser
     article.pico-background-violet-100
-      strong Hello, #{loggedInUser.username}! Welcome 🤗
+      strong Hello, #{loggedInUser.nickname}! Welcome 🤗
   each video in videos
     +video(video)
   else

@@ -4,7 +4,9 @@ include ../mixins/error
 block content 
   if errorMsg 
     +error(errorMsg)
-  form(method="post")
+  form(method="post", enctype="multipart/form-data")
+    label(for="video") Video File 
+    input#video(type="file", name="video", accept="video/*", required)
     label(for="title") Title
     input(id="title", placeholder="Video Title", type="text", required, name="title", maxlength=80)
     label(for="description") Description

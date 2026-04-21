@@ -1,11 +1,19 @@
 extends ../layout
 block content
-  article 
+  video(src="/"+video.fileUrl, controls, width="100%", autoplay) 
+  hr
+  article
+    div
+      img(src=video.owner.avatarUrl.startsWith("http") ? video.owner.avatarUrl : `/${video.owner.avatarUrl}`, alt=`${video.owner.nickname}'s Avatar`, width="100", height="100")
+      strong
+        a(href="/users/profile/"+video.owner.username)=video.owner.nickname 
+    hr
     p=video.description
     each hashtag in video.hashtags
       kbd=hashtag
       span  
     small=video.formattedDate
-  div.grid
-    a(href=`${video.id}/edit` class="secondary") Edit Video &rarr;
-    a.deleteVideo(href=`${video.id}/remove` class="secondary") Delete Video &rarr;
+  if String(video.owner._id) === String(loggedInUser._id)
+    div.grid
+      a(href=`${video.id}/edit` class="secondary") Edit Video &rarr;
+      a.deleteVideo(href=`${video.id}/remove` class="secondary") Delete Video &rarr;
