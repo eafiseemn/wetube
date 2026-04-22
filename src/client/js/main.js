@@ -1,3 +1,5 @@
+import "../scss/styles.scss";
+
 // Cancel Edit Video
 const cancelEditBtn = document.querySelector(".cancelEditBtn");
 const handleCancelEdit = () => {

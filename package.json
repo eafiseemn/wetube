@@ -3,7 +3,8 @@
 	"version": "1.0.0",
 	"description": "Youtube Clone Coding using Node.js",
 	"scripts": {
-		"dev": "nodemon --exec babel-node src/init.js"
+		"dev:server": "nodemon",
+		"dev:assets": "webpack"
 	},
 	"author": "Emily",
 	"license": "MIT",
@@ -24,6 +25,14 @@
 		"@babel/core": "^7.29.0",
 		"@babel/node": "^7.29.0",
 		"@babel/preset-env": "^7.29.0",
-		"nodemon": "^3.1.11"
+		"babel-loader": "^10.1.1",
+		"css-loader": "^7.1.4",
+		"mini-css-extract-plugin": "^2.10.2",
+		"nodemon": "^3.1.11",
+		"sass": "^1.99.0",
+		"sass-loader": "^16.0.7",
+		"style-loader": "^4.0.0",
+		"webpack": "^5.106.2",
+		"webpack-cli": "^7.0.2"
 	}
 }
