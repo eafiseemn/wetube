@@ -1,3 +1,4 @@
 mixin error(message)
-  article.pico-color-red-500
-    strong=message
+  div(role="alert").error-message-box
+    img(src="/assets/alert.svg", alt="" aria-labelledby="error-message")
+    strong#error-message()=message

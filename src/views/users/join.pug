@@ -20,8 +20,13 @@ block content
     input(id="location", name="location", type="text", placeholder="Location", value=oldData? oldData.location : "")
     button(type="submit") Create Account
 
-  hr
-  div
-    span(style={"display":"inline-block"}) Already has an account? 
-    strong 
+  span.social--divider-text OR Continue with
+  a(href="/users/github/start").social-login-button
+    img(src="/assets/github.svg", alt="" aria-labelledby="link-to" width="32px")
+    span#link-to GitHub
+
+  hr.divider
+  div.join--switch-to-login
+    span.join--login-message Already has an account? 
+    strong.join--login-link
       a(href="/login") Log in now &rarr;

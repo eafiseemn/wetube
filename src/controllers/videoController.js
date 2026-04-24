@@ -6,7 +6,7 @@ const regexId = /^[0-9a-f]{24}$/;
 
 export const home = async (req, res) => {
 	try {
-		const videos = await Video.find({});
+		const videos = await Video.find({}).populate("owner");
 		return res.render("home", { pageTitle: "Home", videos });
 	} catch (err) {
 		return res.status(500).render("404", { pageTitle: "Server Error", errorMsg: "Server Error" });
@@ -22,7 +22,7 @@ export const search = async (req, res) => {
 		try {
 			videos = await Video.find({
 				title: { $regex: new RegExp(keyword, "i") },
-			});
+			}).populate("owner");
 		} catch (err) {
 			console.error(err._message);
 			return res
@@ -131,7 +131,7 @@ export const postEdit = async (req, res) => {
 			.render("404", { pageTitle: "Page Not Found", errorMsg: "Wrong Address" });
 	}
 	try {
-		const videoToUpdate = await Video.findById(videoId).select("owner");
+		const videoToUpdate = await Video.findById(videoId);
 		if (!videoToUpdate) {
 			return res
 				.status(404)
@@ -140,7 +140,18 @@ export const postEdit = async (req, res) => {
 		if (String(videoToUpdate.owner) !== userId) {
 			return res.status(403).redirect("/");
 		}
-
+		console.log(hashtags, videoToUpdate.hashtags);
+		if (
+			title === videoToUpdate.title &&
+			description === videoToUpdate.description &&
+			hashtags === videoToUpdate.hashtags.map((tag) => tag.slice(1)).join(", ")
+		) {
+			return res.status(400).render("videos/edit", {
+				pageTitle: `Edit ${videoToUpdate.title}`,
+				errorMsg: "No changes were made.",
+				video: videoToUpdate,
+			});
+		}
 		await Video.findByIdAndUpdate(videoId, {
 			title,
 			description,

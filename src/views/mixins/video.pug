@@ -1,10 +1,17 @@
 mixin video(item)
-  div
-    h4
-      a(href=`/videos/${item.id}`)=item.title 
-    p=item.description
-    each hashtag in item.hashtags
-      kbd=hashtag
-      span  
-    small=item.formattedDate
-    hr
+  div.video-mixin
+    a(href=`/videos/${item.id}`).video-link
+    div.video-thumbnail
+    div.video-info
+      if (!currentPath.startsWith("/users/profile"))
+          a(href=`/users/profile/${item.owner.username}`).video-owner-link
+            img.header--user-avatar(src=item.owner.avatarUrl.startsWith("http") ? item.owner.avatarUrl : `/${item.owner.avatarUrl}`, alt=`${item.owner.username}'s channel`).video-owner-avatar
+      div
+        h4.video-title=item.title 
+        div.video-meta
+          if (!currentPath.startsWith("/users/profile"))
+            small.video-owner=item.owner.username 
+          else 
+            p.video-description=item.description
+          small #{item.meta.views} Views ∙ 
+          small=item.formattedDate

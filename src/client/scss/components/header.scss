@@ -1,0 +1,41 @@
+@use "../config/variables" as v;
+
+header {
+  font-family: v.$header-font;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  border-bottom: 2px solid v.$quaternary;
+  position: sticky;
+  width: 100%;
+  height: 100px;
+  top: 0;
+  background-color: white;
+  z-index: 999;
+
+  #logo {
+    max-width: 10rem;
+  }
+}
+
+.header-nav > ul {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+
+  .active {
+    text-decoration: underline;
+    @include v.underline-style;
+  }
+}
+
+.header--user-avatar {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 100%;
+  border: 2px solid v.$quaternary;
+}
+.active-avatar {
+  border: 4px solid v.$red !important;
+  }

@@ -1,0 +1,21 @@
+@use "../config/variables" as v;
+
+.error-message-box {
+  width: 70%;
+  margin: 2rem auto;
+  border-radius: 1rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 2px solid v.$red;
+  background-color: v.$red-bg;
+  font-family: v.$body-font;
+  font-size: 1.1rem;
+  color: v.$red;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  img {
+    width: 2rem;
+  }
+}

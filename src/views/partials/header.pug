@@ -1,0 +1,21 @@
+header
+  h1
+    a(href="/")
+      img#logo(src="/assets/logo.svg", alt="Wetube")
+  nav.header-nav
+    ul
+      if loggedIn 
+          li
+            a(href="/videos/upload", class=(currentPath === "/videos/upload" ? "active" : "")) Upload Video
+          li 
+            a(href="/users/edit", class=(currentPath === "/users/edit" ? "active" : "")) Edit Profile
+          li 
+            a(href="/users/logout") Log Out
+          li 
+            a(href=`/users/profile/${loggedInUser.username}`)
+              img.header--user-avatar(src=loggedInUser.avatarUrl.startsWith("http") ? loggedInUser.avatarUrl : `/${loggedInUser.avatarUrl}`, alt="My Avatar", class=(currentPath.startsWith("/users/profile/") ? "active-avatar" : ""))
+      else   
+        li
+          a(href="/join", class=(currentPath === "/join" ? "active" : "")) Join
+        li
+          a(href="/login", class=(currentPath === "/login" ? "active" : "")) Login

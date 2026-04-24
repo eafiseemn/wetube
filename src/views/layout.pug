@@ -2,36 +2,15 @@ doctype html
 html(lang="ko-KR")
   head
     title #{pageTitle} | #{siteName}
-    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css")
-    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.colors.min.css")
     link(rel="stylesheet", href="/static/css/styles.css")
 
-  body.container
-    header
-      nav
-        ul
-          li
-            h1=pageTitle
-        ul
-          li
-            a(href="/") Home
-          li
-            a(href="/search") Search
-          if loggedIn 
-            li
-              a(href="/videos/upload") Upload Video
-            li 
-              a(href=`/users/profile/${loggedInUser.username}`) My Profile
-            li 
-              a(href="/users/edit") Edit Profile
-            li 
-              a(href="/users/logout") Log Out
-          else   
-            li
-              a(href="/join") Join
-            li
-              a(href="/login") Login
-    main
-      block content
-    include partials/footer.pug
+  body
+    include partials/header
+    div.container
+      include partials/side-bar
+      main
+          block content-header
+            h2.page-title=pageTitle
+            hr.title--divider
+          block content
     script(src="/static/js/main.js") 

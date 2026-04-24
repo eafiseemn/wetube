@@ -1,0 +1,33 @@
+@use "../config/variables" as v;
+
+.social--divider-text {
+  width: 70%;
+  margin: 1.5rem auto;
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  gap: 1.5rem;
+  &::after {
+    content: "";
+    flex: 1;
+    height: 2px;
+    background-color: v.$tertiary;
+  }
+}
+
+.social-login-button {
+  border: 2px solid v.$secondary;
+  border-radius: 1.2rem;
+  margin: 1.5rem auto;
+  padding: 1rem 3rem;
+  width: 15rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+
+  img,
+  span#link-to {
+    display: block;
+  }
+}

@@ -1,0 +1,8 @@
+@use "../config/variables" as v;
+
+.home--user-message {
+  margin: 2rem;
+  padding: 1rem 3rem;
+  border-radius: 1.2rem;
+  background-color: v.$red-bg;
+}

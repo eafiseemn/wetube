@@ -6,24 +6,25 @@ block content
     +error(errorMsg)
 
   form(method="POST", enctype="multipart/form-data")
-    div.grid
+    div.edit-profile--grid
       div
         label(for="username") Username
-        input(id="username", name="username", type="text", required, placeholder="Username", value=oldData ? oldData.username :loggedInUser.username)
+        input(id="username", name="username", type="text", required, placeholder="Username", value=oldData ? oldData.username :loggedInUser.username, autocomplete="username")
         label(for="nickname") Nickname
         input(id="nickname", name="nickname", type="text", required, placeholder="Nickname", value=oldData ? oldData.username :loggedInUser.nickname)
         label(for="email") Email 
         input(id="email", name="email", type="email", required, placeholder="Email Address", value=oldData ? oldData.email :loggedInUser.email)
         label(for="location") Location 
         input(id="location", name="location", type="text", placeholder="Location", value=oldData ? oldData.location :loggedInUser.location)
-      div
-        if loggedInUser.avatarUrl 
-          img(src=loggedInUser.avatarUrl.startsWith("http") ? loggedInUser.avatarUrl : `/${loggedInUser.avatarUrl}`, height="100", width="100")
-        label(for="avatar") Avatar
-        input(id="avatar", name="avatar", type="file", accept="image/*")
+      div.edit-avatar
+        img(src=loggedInUser.avatarUrl.startsWith("http") ? loggedInUser.avatarUrl : `/${loggedInUser.avatarUrl}`, alt="My Avatar", height="100", width="100").current-avatar
+        div.file-input-box
+          input.upload-file-name(value="Upload avatar file")
+          label(for="avatar") Select File
+          input.upload-file-input(id="avatar", name="avatar", type="file", accept="image/*")
     button(type="submit") Update Profile
-    input(type="button" class="pico-background-red-500 cancelEditBtn" style={"border": "none"} value="Cancel")
+    button(type="button" class="cancelEditBtn") Cancel
   
   if !loggedInUser.socialOnly
-    hr
-    a(href="/users/change-password") Change Password &rarr;
+    hr.divider-grey.edit-profile--divider
+    a(href="/users/change-password").change-password-link Change Password &rarr;

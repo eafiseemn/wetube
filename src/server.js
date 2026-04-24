@@ -34,6 +34,7 @@ app.use(localsMiddleware);
 
 // File Upload Middleware
 app.use("/uploads", express.static("uploads"));
+app.use("/assets", express.static("src/icons"));
 
 // Frontend Middleware
 app.use("/static", express.static("assets"));

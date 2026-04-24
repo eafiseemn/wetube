@@ -1,11 +1,26 @@
 extends layout
 include mixins/video
 
+block content-header
 block content
   if loggedInUser
-    article.pico-background-violet-100
+    article.home--user-message
       strong Hello, #{loggedInUser.nickname}! Welcome 🤗
-  each video in videos
-    +video(video)
+
+  if videos.length === 0
+    span.no-video-message No Video Yet 🥹
   else
-    span No Video Yet 🥹
+    .video-grid
+      each video in videos
+        +video(video)
+        +video(video)
+        +video(video)
+        +video(video)
+        +video(video)
+        +video(video)
+        +video(video)
+        +video(video)
+        +video(video)
+        +video(video)
+        +video(video)
+        +video(video)

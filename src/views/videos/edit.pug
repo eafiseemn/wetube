@@ -1,8 +1,14 @@
 extends ../layout 
+include ../mixins/error
+
+block content-header
 block content
-  h4 Update Video 
+  h2.page-title Update Video 
+  hr.title--divider 
+
   if errorMsg 
     +error(errorMsg)
+
   form(method="post")
     label(for="title") Title
     input(id="title", placeholder="Video Title", type="text", required, name="title", maxlength=80, value=video.title)
@@ -11,4 +17,4 @@ block content
     label(for="hashtags") Hashtags (Separate multiple values with a comma)
     input(id="hashtags", placeholder="Hashtags", type="text", required, name="hashtags", value=video.hashtags.map(tag => tag.slice(1)).join(", "))
     button(type="submit") Edit Video!
-    input(type="button" class="pico-background-red-500 cancelEditBtn" style={"border": "none"} value="Cancel")
+    button(type="button" class="cancelEditBtn") Cancel

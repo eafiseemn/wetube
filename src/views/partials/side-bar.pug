@@ -1,0 +1,25 @@
+aside.side-bar
+  nav
+    ul
+      if currentPath === "/"
+        li
+          a(href="/").nav-link.active
+            img(src="/assets/home-active.svg", alt="", aria-labelledby="home-nav")
+            span#home-nav Home
+      else
+        li
+          a(href="/").nav-link
+            img(src="/assets/home.svg", alt="", aria-labelledby="home-nav")
+            span#home-nav Home
+      if currentPath === "/search"
+        li
+          a(href="/search").nav-link.active
+            img(src="/assets/search-active.svg", alt="", aria-labelledby="search-nav")
+            span#search-nav Search
+      else
+        li
+          a(href="/search").nav-link
+            img(src="/assets/search.svg", alt="", aria-labelledby="search-nav")
+            span#search-nav Search
+
+  include footer

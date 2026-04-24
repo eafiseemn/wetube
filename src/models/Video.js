@@ -24,7 +24,7 @@ videoSchema.static("formatHashtags", function (hashtags) {
 
 videoSchema.virtual("formattedDate").get(function () {
 	const isUpdated = this.updatedAt > this.createdAt;
-	return `${(isUpdated ? this.updatedAt : this.createdAt).toLocaleString("ko-KR")} ${isUpdated ? "Updated" : "Created"}`;
+	return `${(isUpdated ? this.updatedAt : this.createdAt).toLocaleDateString("ko-KR")} ${isUpdated ? "Updated" : "Created"}`;
 });
 
 const videoModel = mongoose.model("Video", videoSchema);

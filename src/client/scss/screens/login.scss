@@ -1,0 +1,20 @@
+@use "../config/variables" as v;
+
+.login--switch-to-join {
+  width: 70%;
+  margin: 0 auto;
+  margin-bottom: 8rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.login--join-link {
+  text-decoration: underline;
+  @include v.underline-style;
+}
+
+.login--join-message {
+  display: inline-block;
+}

@@ -1,7 +1,51 @@
-@import "./_variables";
+// Config
+@use "./config/reset";
+@use "./config/variables" as v;
 
+// Components
+@use "./components/header.scss";
+@use "./components//side-bar.scss";
+@use "./components/footer.scss";
+@use "./components/video-mixin.scss";
+@use "./components/form.scss";
+@use "./components/social-login.scss";
+@use "./components/divider.scss";
+@use "./components/error-mixin.scss";
+
+// Pages
+@use "./screens/home.scss";
+@use "./screens/join.scss";
+@use "./screens/login.scss";
+@use "./screens/search.scss";
+@use "./screens/edit-profile.scss";
+
+// Defaults
 body {
-  background-color: $background-base;
-  // width: 100%;
-  // height: 100%;
+  font-family: v.$body-font;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.5;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.container {
+  flex-grow: 1;
+  display: flex;
+  gap: 1rem;
+  overflow: hidden;
+}
+
+main {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.page-title {
+  font-family: v.$header-font;
+  font-size: 2.5rem;
+  text-align: center;
+  margin: 3rem 0 1rem 0;
 }

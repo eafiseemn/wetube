@@ -3,10 +3,10 @@ import bcrypt from "bcrypt";
 
 /************** Join **************/
 
-export const getJoin = (req, res) => res.render("users/join", { pageTitle: "Create Account" });
+export const getJoin = (req, res) => res.render("users/join", { pageTitle: "Create An Account" });
 export const postJoin = async (req, res) => {
 	const { username, nickname, email, password, passwordConfirm, location } = req.body;
-	const pageTitle = "Create Account";
+	const pageTitle = "Create An Account";
 	// Password Confirm
 	if (password !== passwordConfirm) {
 		return res.status(400).render("users/join", {

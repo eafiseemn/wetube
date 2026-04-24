@@ -7,8 +7,25 @@ block content
     button(type="submit") Search Now!
 
   if(keyword)
-    article 
-      h4 Search for: #{keyword}
-      hr
-      each video in videos
-        +video(video)
+    article
+      h4.search--keyword Search for: #{keyword}
+      hr.divider-grey
+      if videos.length === 0
+        span.no-video-message No results found 🥹
+      else
+        .video-grid
+          each video in videos
+            +video(video)
+            +video(video)
+            +video(video)
+            +video(video)
+            +video(video)
+            +video(video)
+            +video(video)
+            +video(video)
+            +video(video)
+            +video(video)
+            +video(video)
+            +video(video)
+
+

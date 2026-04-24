@@ -8,10 +8,23 @@ block content
       h4=user.nickname 
       small(style={"display":"block"})="@"+user.username
       small(style={"display":"block"})="Joined At "+user.joinedAt
-  hr
+  hr.divider-grey
   div
     h2="Uploaded Videos"
-    each video in user.videos
-      +video(video)
+    if user.videos.length === 0
+      span.no-video-message No videos yet.. Start sharing your moments 🚀
     else
-      span No Video Yet 🥹
+      .video-grid
+        each video in user.videos
+          +video(video)
+          +video(video)
+          +video(video)
+          +video(video)
+          +video(video)
+          +video(video)
+          +video(video)
+          +video(video)
+          +video(video)
+          +video(video)
+          +video(video)
+          +video(video)

@@ -1,0 +1,20 @@
+// Colors
+$red: #CC0000;
+$red-bg: #cc000010;
+$blue: #065FD4;
+$primary: #000000;
+$secondary: #C7C7C7;
+$tertiary: #DEDEDE;
+$quaternary: #E5E5E5;
+
+// Fonts
+@import url('https://fonts.googleapis.com/css2?family=Bungee&family=Michroma&display=swap');
+$header-font: "Bungee","Michroma", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+$body-font: "Michroma", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+// Mixins
+@mixin underline-style {
+  text-decoration-color: $red;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.5rem;
+}

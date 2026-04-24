@@ -6,6 +6,7 @@ export const localsMiddleware = (req, res, next) => {
 		res.locals.loggedIn = req.session.loggedIn;
 		res.locals.loggedInUser = req.session.user;
 	}
+	res.locals.currentPath = req.path;
 	next();
 };
 

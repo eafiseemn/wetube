@@ -1,0 +1,110 @@
+@use "../config/variables" as v;
+
+form {
+  width: 80%;
+  padding: 1rem 5rem;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+
+  input, textarea {
+    width: 100%;
+    border-radius: 1rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 2px solid v.$secondary;
+    font-family: v.$body-font;
+    font-size: 1.1rem;
+  
+    &:focus {
+      outline: 2px solid rgba(v.$red, 0.3);
+      outline-offset: -2px;
+    }
+  }
+  
+  label {
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    user-select: none;
+  }
+  
+  button[type="submit"] {
+    background-color: v.$red;
+    color: white;
+    font-family: v.$header-font;
+    font-size: 1.3rem;
+    line-height: 1.2;
+    width: 100%;
+    border-radius: 1rem;
+    padding: 1rem 1.2rem;
+    border: 2px solid v.$red;
+    margin: 0.5rem 0;
+  
+    &:hover {
+      opacity: 80%;
+      cursor: pointer;
+    }
+  }
+
+  button[type="button"] {
+    background-color: v.$tertiary;
+    color: rgba(v.$primary, 0.7);
+    font-family: v.$header-font;
+    font-size: 1.3rem;
+    line-height: 1.2;
+    width: 100%;
+    border-radius: 1rem;
+    padding: 1rem 1.2rem;
+    border: 2px solid v.$tertiary;
+    margin: 0.5rem 0;
+  
+    &:hover {
+      opacity: 80%;
+      cursor: pointer;
+    }
+  }
+}
+
+.file-input-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+
+  .upload-file-name {
+    display: inline-block;
+    margin-bottom: 0;
+    flex: 1;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  label {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    background-color: v.$blue;
+    cursor: pointer;
+    padding: 1rem 0.5rem;
+    margin-bottom: 1rem;
+    border-radius: 1rem;
+    font-size: 1.1rem;
+    font-family: v.$header-font;
+    width: 100%;
+    &:hover {
+      opacity: 80%;
+      cursor: pointer;
+    }
+  }
+  
+  input[type="file"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    opacity: 0;
+  }
+}

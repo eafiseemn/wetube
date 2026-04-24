@@ -1,0 +1,25 @@
+@use "../config/variables" as v;
+
+.divider {
+  width: 60%;
+  margin: 5rem auto;
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(to right, transparent, v.$red, transparent);
+}
+
+.title--divider {
+  width: 40%;
+  margin: 0 auto 5rem auto;
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(to right, transparent, v.$red, transparent);
+}
+
+.divider-grey {
+  width: 95%;
+  margin: 1rem auto;
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(to right, v.$secondary, transparent);
+}
