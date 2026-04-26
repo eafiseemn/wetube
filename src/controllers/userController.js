@@ -323,14 +323,19 @@ export const postChangePassword = async (req, res) => {
 export const profile = async (req, res) => {
 	const { username } = req.params;
 	try {
-		const user = await User.findOne({ username }).populate("videos");
+		const user = await User.findOne({ username }).populate({
+			path: "videos",
+			populate: {
+				path: "owner",
+				model: "User",
+			},
+		});
 		if (!user) {
 			return res.status(404).render("404", {
 				pageTitle: "User Not Found",
 				errorMsg: `Can't find username: ${username}`,
 			});
 		}
-
 		return res.render("users/profile", { pageTitle: `${user.nickname}'s Profile`, user });
 	} catch (err) {
 		console.error("User profile Load Error: ", err);

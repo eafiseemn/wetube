@@ -11,13 +11,14 @@
 @use "./components/social-login.scss";
 @use "./components/divider.scss";
 @use "./components/error-mixin.scss";
+@use "./components/shared.scss";
 
 // Pages
 @use "./screens/home.scss";
-@use "./screens/join.scss";
-@use "./screens/login.scss";
-@use "./screens/search.scss";
 @use "./screens/edit-profile.scss";
+@use "./screens/profile.scss";
+@use "./screens/page-404.scss";
+@use "./screens/watch.scss";
 
 // Defaults
 body {

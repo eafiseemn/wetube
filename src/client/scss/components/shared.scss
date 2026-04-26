@@ -1,6 +1,6 @@
 @use "../config/variables" as v;
 
-.login--switch-to-join {
+.auth-switch {
   width: 70%;
   margin: 0 auto;
   margin-bottom: 8rem;
@@ -10,11 +10,18 @@
   align-items: center;
 }
 
-.login--join-link {
+.auth-switch-link {
   text-decoration: underline;
   @include v.underline-style;
 }
 
-.login--join-message {
+.auth-switch-message {
   display: inline-block;
+}
+
+.semi-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  width: 95%;
+  margin: 3rem auto 0 auto;
 }

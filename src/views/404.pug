@@ -1,9 +1,14 @@
 extends layout
 include mixins/error
 
+block content-header
 block content
-  h2 Oops, Page Not Found!
-  if errorMsg 
-    +error(errorMsg)
-  button.outline
-    a(href="/") Go Back to Home
+  div.error-content
+    img.error--main-image(src="/assets/404.svg", alt="404 Error")
+    h2.error--title Oops, Page Not Found!
+    if errorMsg 
+      +error(errorMsg)
+    else 
+      p The page you are looking for might have been removed had its name changed or is temporarily unavailable.
+    button.error--home-button
+      a(href="/") Go Back to Home

@@ -1,0 +1,34 @@
+@use "../config/variables" as v;
+
+.profile--grid {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 0 auto;
+  margin-bottom: 5rem;
+  // border: 2px solid v.$secondary;
+  
+  .profile--avatar {
+    border-radius: 100%;
+    width: 12rem;
+    height: 12rem;
+  }
+
+  .profile--nickname {
+    margin-bottom: 0.5rem;
+    font-size: 2rem;
+    font-family: v.$header-font;
+    text-decoration: underline;
+    @include v.underline-style;
+  }
+
+  article {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  small {
+    display: block;
+  }
+}

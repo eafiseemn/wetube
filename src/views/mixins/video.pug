@@ -9,9 +9,6 @@ mixin video(item)
       div
         h4.video-title=item.title 
         div.video-meta
-          if (!currentPath.startsWith("/users/profile"))
-            small.video-owner=item.owner.username 
-          else 
-            p.video-description=item.description
+          small.video-owner=item.owner.username 
           small #{item.meta.views} Views ∙ 
           small=item.formattedDate

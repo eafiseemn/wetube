@@ -27,6 +27,6 @@ userRouter
 	.all(userOnlyMiddleware)
 	.get(getChangePassword)
 	.post(postChangePassword);
-userRouter.get("/profile/:username", userOnlyMiddleware, profile);
+userRouter.get("/profile/:username", profile);
 
 export default userRouter;

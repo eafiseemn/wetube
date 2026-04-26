@@ -2,15 +2,15 @@ extends ../layout
 include ../mixins/video
 
 block content
-  div.grid
-    img(src=user.avatarUrl.startsWith("http") ? user.avatarUrl : `/${user.avatarUrl}`, alt=`${user.nickname}'s Avatar`, width="200", height="200")
+  div.profile--grid
+    img(src=user.avatarUrl.startsWith("http") ? user.avatarUrl : `/${user.avatarUrl}`, alt=`${user.nickname}'s Avatar`).profile--avatar
     article 
-      h4=user.nickname 
-      small(style={"display":"block"})="@"+user.username
-      small(style={"display":"block"})="Joined At "+user.joinedAt
-  hr.divider-grey
+      h4.profile--nickname=user.nickname 
+      small="@"+user.username
+      small="Joined At "+user.joinedAt
   div
-    h2="Uploaded Videos"
+    h2.semi-title="Uploaded Videos"
+    hr.divider-grey
     if user.videos.length === 0
       span.no-video-message No videos yet.. Start sharing your moments 🚀
     else

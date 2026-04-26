@@ -104,7 +104,7 @@ export const getEdit = async (req, res) => {
 		if (!video) {
 			return res
 				.status(404)
-				.render("404", { pageTitle: "Page Not Found", errorMsg: "Cannot Find Video" });
+				.render("404", { pageTitle: "Page Not Found", errorMsg: "Can't Find Video" });
 		}
 		if (String(video.owner) !== userId) {
 			return res.status(403).redirect("/");

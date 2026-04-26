@@ -2,20 +2,23 @@ extends ../layout
 
 block content-header
 block content
-  video(src="/"+video.fileUrl, controls, width="100%", autoplay) 
-  hr
-  article
-    div
-      img(src=video.owner.avatarUrl.startsWith("http") ? video.owner.avatarUrl : `/${video.owner.avatarUrl}`, alt=`${video.owner.nickname}'s Avatar`, width="100", height="100")
-      strong
-        a(href="/users/profile/"+video.owner.username)=video.owner.nickname 
-    hr
-    p=video.description
-    each hashtag in video.hashtags
-      kbd=hashtag
-      span  
-    small=video.formattedDate
-  if String(video.owner._id) === String(loggedInUser._id)
-    div.grid
-      a(href=`${video.id}/edit` class="secondary") Edit Video &rarr;
-      a.deleteVideo(href=`${video.id}/remove` class="secondary") Delete Video &rarr;
+  div.watch--main-video
+    video.watch--video(src="/"+video.fileUrl, controls, width="100%", autoplay)
+    div.watch--video-info
+      h4.video--title=pageTitle
+      div.video--owner-info
+        a(href="/users/profile/"+video.owner.username)
+          img(src=video.owner.avatarUrl.startsWith("http") ? video.owner.avatarUrl : `/${video.owner.avatarUrl}`, alt=`${video.owner.nickname}'s Avatar`)
+          strong=video.owner.nickname 
+        if (loggedIn && String(video.owner._id) === String(loggedInUser._id))
+          div.edit-video-link
+            a(href=`${video.id}/edit` class="secondary") Edit Video &rarr;
+            a.deleteVideo(href=`${video.id}/remove` class="secondary") Delete Video &rarr;
+      div.video--description
+        small #{video.meta.views} Views ∙ 
+        small=video.formattedDate
+        ul.video--hashtags
+          each hashtag in video.hashtags
+            li=hashtag
+        p=video.description
+

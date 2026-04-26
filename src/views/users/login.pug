@@ -12,13 +12,10 @@ block content
     input(id="password", name="password", type="password", required, placeholder="Password")
     button(type="submit") Login
 
-  span.social--divider-text OR Continue with
-  a(href="/users/github/start").social-login-button
-    img(src="/assets/github.svg", alt="" aria-labelledby="link-to" width="32px")
-    span#link-to GitHub
+  include ../partials/social-login
   
   hr.divider
-  div.login--switch-to-join
-    span.login--join-message Don't have an account yet? 
-    strong.login--join-link
+  div.auth-switch
+    span.auth-switch-message Don't have an account yet? 
+    strong.auth-switch-link
       a(href="/join") Register now &rarr;

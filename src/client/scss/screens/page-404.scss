@@ -1,0 +1,41 @@
+@use "../config/variables" as v;
+
+.error-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+
+  .error--main-image {
+    width: 30%;
+    margin: 5rem 0;
+    margin-bottom: 2rem;
+  }
+  .error--title {
+    font-family: v.$header-font;
+    font-size: 3.5rem;
+  }
+  p {
+    width: 50%;
+    line-height: 1.8;
+    text-align: center;
+  }
+  .error-message-box {
+    width: 50%;
+  }
+  .error--home-button {
+    background-color: v.$red;
+    color: white;
+    font-family: v.$header-font;
+    font-size: 1.3rem;
+    line-height: 1.2;
+    border-radius: 5rem;
+    padding: 1.2rem 1.5rem;
+    border: 2px solid v.$red;
+  
+    &:hover {
+      opacity: 80%;
+      cursor: pointer;
+    }
+  }
+}
