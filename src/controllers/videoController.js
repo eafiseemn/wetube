@@ -140,7 +140,6 @@ export const postEdit = async (req, res) => {
 		if (String(videoToUpdate.owner) !== userId) {
 			return res.status(403).redirect("/");
 		}
-		console.log(hashtags, videoToUpdate.hashtags);
 		if (
 			title === videoToUpdate.title &&
 			description === videoToUpdate.description &&
