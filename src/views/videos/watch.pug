@@ -3,7 +3,21 @@ extends ../layout
 block content-header
 block content
   div.watch--main-video
-    video.watch--video(src="/"+video.fileUrl, controls, width="100%", autoplay)
+    #video-container
+      video.watch--video(src="/"+video.fileUrl)
+      #video-controller
+        button#play 
+          img(src="/assets/pause.svg", alt="Pause")
+        div#videoTime 
+          span#currentTime 00:00
+          input#timeline(type="range", name="timeline", step="1", value="0", min="0")
+          span#totalTime 
+        #volume-slider
+          button#mute
+            img(src="/assets/volume.svg", alt="Mute") 
+            input#volume(type="range", name="volume", min="0", max="1", step="0.1")
+        button#fullScreen 
+          img(src="/assets/expand.svg", alt="Enter fullscreen")
     div.watch--video-info
       h4.video--title=pageTitle
       div.video--owner-info
@@ -21,4 +35,6 @@ block content
           each hashtag in video.hashtags
             li=hashtag
         p=video.description
+block scripts 
+  script(src="/static/js/videoPlayer.js")
 
