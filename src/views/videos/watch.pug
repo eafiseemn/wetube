@@ -3,7 +3,7 @@ extends ../layout
 block content-header
 block content
   div.watch--main-video
-    #video-container
+    #video-container(data-id=video._id)
       video.watch--video(src="/"+video.fileUrl)
       #video-controller
         button#play 

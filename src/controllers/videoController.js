@@ -193,3 +193,21 @@ export const remove = async (req, res) => {
 		return res.redirect(`/videos/${videoId}`);
 	}
 };
+
+/************** View Count **************/
+export const registerView = async (req, res) => {
+	const videoId = req.params.id;
+	if (!regexId.test(videoId)) {
+		console.error("video id: regex test failed");
+		return res.sendStatus(404);
+	}
+	const video = await Video.findById(videoId);
+	if (!video) {
+		console.error("video id: regex test failed");
+		return res.sendStatus(404);
+	}
+
+	video.meta.views += 1;
+	await video.save();
+	return res.sendStatus(200);
+};

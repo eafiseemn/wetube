@@ -191,6 +191,12 @@ const handleTimelineChange = (e) => {
 	updateTimelineColor(value);
 };
 
+/************** View Count **************/
+const handleEnded = () => {
+	const videoId = videoContainer.dataset.id;
+	fetch(`/api/videos/${videoId}/view`, { method: "POST" });
+};
+
 /************** EventListeners **************/
 videoContainer.addEventListener("mousemove", handleMouseMove);
 playBtn.addEventListener("click", handlePlayClick);
@@ -203,3 +209,4 @@ document.addEventListener("keydown", handleFullScreenPlay);
 video.addEventListener("loadedmetadata", handleLoadedMetadata);
 video.addEventListener("timeupdate", handleTimeUpdate);
 timeline.addEventListener("input", handleTimelineChange);
+video.addEventListener("ended", handleEnded);
