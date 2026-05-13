@@ -12,6 +12,7 @@ block content
         button#recordBtn
           .record-background
           .record-inner
+
         button#stopBtn.hidden
         button#pauseBtn.hidden
           img(src="/assets/pause.svg", alt="Pause").pauseIcon
@@ -20,7 +21,7 @@ block content
         button#downloadBtn.hidden
           img(src="/assets/download.svg", alt="Download")
           .spinner(role="status").hidden
-            span.sr-only 로딩 중
+            span.sr-only Loading...
         button#restartBtn.hidden
           img(src="/assets/restart.svg", alt="Restart")
 
@@ -30,6 +31,10 @@ block content
         input.upload-file-name(value="Select video file")
         label(for="video") Select Video File 
         input.upload-file-input(id="video",type="file", name="video", accept="video/*", required)
+      div.file-input-box
+        input.upload-file-name(value="Select thumbnail image file")
+        label(for="thumbnail") Select Thumbnail Image 
+        input.upload-file-input(id="thumbnail",type="file", name="thumbnail", accept="image/*", required)
       label(for="title") Title
       input(id="title", placeholder="Video Title", type="text", required, name="title", maxlength=80)
       label(for="description") Description

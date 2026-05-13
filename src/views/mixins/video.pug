@@ -1,7 +1,7 @@
 mixin video(item)
   div.video-mixin
     a(href=`/videos/${item.id}`).video-link
-    div.video-thumbnail
+    div.video-thumbnail(style=`background-image: url(${item.thumbUrl}); background-size: cover; background-position: center;`)
     div.video-info
       if (!currentPath.startsWith("/users/profile"))
           a(href=`/users/profile/${item.owner.username}`).video-owner-link

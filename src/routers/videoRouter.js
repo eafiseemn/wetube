@@ -15,7 +15,13 @@ videoRouter
 	.route("/upload")
 	.all(userOnlyMiddleware)
 	.get(getUpload)
-	.post(videoUploader.single("video"), postUpload);
+	.post(
+		videoUploader.fields([
+			{ name: "video", maxCount: 1 },
+			{ name: "thumbnail", maxCount: 1 },
+		]),
+		postUpload,
+	);
 videoRouter.get("/:id", watch);
 videoRouter.route("/:id/edit").all(userOnlyMiddleware).get(getEdit).post(postEdit);
 videoRouter.get("/:id/remove", userOnlyMiddleware, remove);
