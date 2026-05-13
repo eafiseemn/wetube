@@ -19,6 +19,8 @@ block content
           
         button#downloadBtn.hidden
           img(src="/assets/download.svg", alt="Download")
+          .spinner(role="status").hidden
+            span.sr-only 로딩 중
         button#restartBtn.hidden
           img(src="/assets/restart.svg", alt="Restart")
 

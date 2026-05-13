@@ -52,7 +52,7 @@ export const postJoin = async (req, res) => {
 		});
 		return res.redirect("/login");
 	} catch (err) {
-		console.error("Join Error: ", err);
+		console.error("[ERROR/DB] Join Error: ", err);
 		return res.status(500).render("users/join", {
 			pageTitle,
 			errorMsg: "Internal Server Error. Please try again later.",
@@ -89,7 +89,7 @@ export const postLogin = async (req, res) => {
 		req.session.user = user.toObject();
 		return res.redirect("/");
 	} catch (err) {
-		console.error("Login Error: ", err);
+		console.error("[ERROR/DB] Login Error: ", err);
 		return res.status(500).render("users/login", {
 			pageTitle,
 			errorMsg: "Internal Server Error. Please try again later.",
@@ -137,7 +137,7 @@ export const finishGithubLogin = async (req, res) => {
 		const tokenRequest = await data.json();
 
 		if (!tokenRequest.access_token) {
-			console.error("GitHub Token Error");
+			console.error("[ERROR/GITHUB] GitHub Token Error");
 			return res.status(400).render("users/login", {
 				pageTitle,
 				errorMsg: "Failed to Authenticate through GitHub.",
@@ -189,7 +189,7 @@ export const finishGithubLogin = async (req, res) => {
 		req.session.user = user.toObject();
 		return res.redirect("/");
 	} catch (err) {
-		console.error("Github Login Error", err);
+		console.error("[ERROR/GITHUB] Github Login Error", err);
 		return res.status(500).render("users/login", {
 			pageTitle,
 			errorMsg: "Internal Server Error. Please try again later.",
@@ -263,7 +263,7 @@ export const postEdit = async (req, res) => {
 		req.session.user = updatedUser;
 		return res.redirect("/users/edit");
 	} catch (err) {
-		console.error("Profile Update Error: ", err);
+		console.error("[ERROR/DB] Profile Update Error: ", err);
 		return res.status(500).render("users/edit-profile", {
 			pageTitle,
 			errorMsg: "Something went wrong. Please try again later.",
@@ -310,7 +310,7 @@ export const postChangePassword = async (req, res) => {
 		user.save();
 		return res.redirect("/users/logout");
 	} catch (err) {
-		console.error("Password Change Error: ", err);
+		console.error("[ERROR/DB] Password Change Error: ", err);
 		return res.status(500).render("users/change-password", {
 			pageTitle,
 			errorMsg: "Something went wrong. Please try again later.",
@@ -338,7 +338,7 @@ export const profile = async (req, res) => {
 		}
 		return res.render("users/profile", { pageTitle: `${user.nickname}'s Profile`, user });
 	} catch (err) {
-		console.error("User profile Load Error: ", err);
+		console.error("[ERROR/DB] User profile Load Error: ", err);
 		res.status(500).render("404", { pageTitle: "Error", errorMsg: "Internal Server Error" });
 	}
 };

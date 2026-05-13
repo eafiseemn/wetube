@@ -24,7 +24,7 @@ export const search = async (req, res) => {
 				title: { $regex: new RegExp(keyword, "i") },
 			}).populate("owner");
 		} catch (err) {
-			console.error(err._message);
+			console.error("[ERROR/DB] Search Error: ", err._message || err.message);
 			return res
 				.status(500)
 				.render("404", { pageTitle: "Server Error", errorMsg: "Something's Wrong!" });
@@ -47,7 +47,7 @@ export const watch = async (req, res) => {
 		if (!video) throw new Error("No video found match to this ID");
 		return res.render("videos/watch", { pageTitle: video.title, video });
 	} catch (err) {
-		console.error(err.message);
+		console.error("[ERROR/DB] Watch Video Error: ", err._message || err.message);
 		return res
 			.status(404)
 			.render("404", { pageTitle: "Page Not Found", errorMsg: "Video Not Found" });
@@ -80,7 +80,7 @@ export const postUpload = async (req, res) => {
 		user.save();
 		return res.redirect("/");
 	} catch (err) {
-		console.error(err);
+		console.error("[ERROR/DB] Video Upload Error: ", err._message || err.message);
 		return res.render("videos/upload", { pageTitle: "Upload New Video", errorMsg: err._message });
 	}
 };
@@ -111,7 +111,7 @@ export const getEdit = async (req, res) => {
 		}
 		return res.render("videos/edit", { pageTitle: `Edit ${video.title}`, video });
 	} catch (err) {
-		console.error("DB Error:", err.message);
+		console.error("[ERROR/DB] Find Video Error: ", err._message || err.message);
 		return res.redirect("/");
 	}
 };
@@ -158,7 +158,7 @@ export const postEdit = async (req, res) => {
 		});
 		return res.redirect(`/videos/${videoId}`);
 	} catch (err) {
-		console.error(err.message);
+		console.error("[ERROR/DB] Edit Video Error: ", err._message || err.message);
 		return res.status(500).render("videos/edit", {
 			pageTitle: "Edit Video",
 			video: { title, description, hashtags, _id: videoId },
@@ -189,7 +189,7 @@ export const remove = async (req, res) => {
 		await Video.findByIdAndDelete(videoId);
 		return res.redirect("/");
 	} catch (err) {
-		console.error(err._message);
+		console.error("[ERROR/DB] Remove Video Error: ", err._message || err.message);
 		return res.redirect(`/videos/${videoId}`);
 	}
 };
@@ -198,12 +198,12 @@ export const remove = async (req, res) => {
 export const registerView = async (req, res) => {
 	const videoId = req.params.id;
 	if (!regexId.test(videoId)) {
-		console.error("video id: regex test failed");
+		console.error("[ERROR/DB] Search Video Error: regex test failed");
 		return res.sendStatus(404);
 	}
 	const video = await Video.findById(videoId);
 	if (!video) {
-		console.error("video id: regex test failed");
+		console.error("[ERROR/DB] Find Video Error: ", err._message || err.message);
 		return res.sendStatus(404);
 	}
 
