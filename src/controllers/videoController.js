@@ -80,6 +80,7 @@ export const postUpload = async (req, res) => {
 		const user = await User.findById(userId);
 		user.videos.push(newVideo._id);
 		user.save();
+		req.flash("success", "Success to upload video.");
 		return res.redirect("/");
 	} catch (err) {
 		console.error("[ERROR/DB] Video Upload Error: ", err._message || err.message);
@@ -109,11 +110,13 @@ export const getEdit = async (req, res) => {
 				.render("404", { pageTitle: "Page Not Found", errorMsg: "Can't Find Video" });
 		}
 		if (String(video.owner) !== userId) {
+			req.flash("error", "Not Authorized.");
 			return res.status(403).redirect("/");
 		}
 		return res.render("videos/edit", { pageTitle: `Edit ${video.title}`, video });
 	} catch (err) {
 		console.error("[ERROR/DB] Find Video Error: ", err._message || err.message);
+		req.flash("error", "Failed to find requested video.");
 		return res.redirect("/");
 	}
 };
@@ -140,6 +143,7 @@ export const postEdit = async (req, res) => {
 				.render("404", { pageTitle: "Page Not Found", errorMsg: "Can't Find Video" });
 		}
 		if (String(videoToUpdate.owner) !== userId) {
+			req.flash("error", "Not Authorized.");
 			return res.status(403).redirect("/");
 		}
 		if (
@@ -158,6 +162,7 @@ export const postEdit = async (req, res) => {
 			description,
 			hashtags: Video.formatHashtags(hashtags),
 		});
+		req.flash("success", "Success to edit video.");
 		return res.redirect(`/videos/${videoId}`);
 	} catch (err) {
 		console.error("[ERROR/DB] Edit Video Error: ", err._message || err.message);
@@ -186,12 +191,15 @@ export const remove = async (req, res) => {
 				.render("404", { pageTitle: "Page Not Found", errorMsg: "Can't Find Video" });
 		}
 		if (String(videoToDelete.owner) !== userId) {
+			req.flash("error", "Not Authorized.");
 			return res.status(403).redirect("/");
 		}
 		await Video.findByIdAndDelete(videoId);
+		req.flash("success", "Success to delete video.");
 		return res.redirect("/");
 	} catch (err) {
 		console.error("[ERROR/DB] Remove Video Error: ", err._message || err.message);
+		req.flash("error", "Something went wrong... Please try again.");
 		return res.redirect(`/videos/${videoId}`);
 	}
 };

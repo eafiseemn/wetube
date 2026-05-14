@@ -7,6 +7,7 @@ import videoRouter from "./routers/videoRouter";
 import userRouter from "./routers/userRouter";
 import apiRouter from "./routers/apiRouter";
 import { localsMiddleware } from "./middlewares";
+import flash from "express-flash";
 
 const app = express();
 
@@ -32,6 +33,9 @@ app.use(
 );
 
 app.use(localsMiddleware);
+
+// Toast Middleware
+app.use(flash());
 
 // File Upload Middleware
 app.use("/uploads", express.static("uploads"));

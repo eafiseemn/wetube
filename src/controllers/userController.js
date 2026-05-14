@@ -50,6 +50,7 @@ export const postJoin = async (req, res) => {
 			location,
 			avatarUrl: "uploads/avatar/5475dddc9eef38ed98de61d8ab471d23",
 		});
+		req.flash("success", "Success to create an account. Please login.");
 		return res.redirect("/login");
 	} catch (err) {
 		console.error("[ERROR/DB] Join Error: ", err);
@@ -87,6 +88,7 @@ export const postLogin = async (req, res) => {
 		// Login Success
 		req.session.loggedIn = true;
 		req.session.user = user.toObject();
+		req.flash("success", `Hello, ${user.nickname}`);
 		return res.redirect("/");
 	} catch (err) {
 		console.error("[ERROR/DB] Login Error: ", err);
@@ -187,6 +189,7 @@ export const finishGithubLogin = async (req, res) => {
 		}
 		req.session.loggedIn = true;
 		req.session.user = user.toObject();
+		req.flash("success", `Hello, ${user.nickname}`);
 		return res.redirect("/");
 	} catch (err) {
 		console.error("[ERROR/GITHUB] Github Login Error", err);
@@ -200,7 +203,15 @@ export const finishGithubLogin = async (req, res) => {
 /************** Log Out **************/
 
 export const logout = (req, res) => {
-	req.session.destroy();
+	// req.session.destroy();
+	req.session.user = null;
+	req.session.loggedIn = false;
+	const existingMsg = req.flash("success");
+	if (existingMsg.length === 0) {
+		req.flash("success", "See you later!");
+	} else {
+		req.flash("success", existingMsg);
+	}
 	return res.redirect("/login");
 };
 
@@ -261,6 +272,7 @@ export const postEdit = async (req, res) => {
 			{ returnDocument: "after" },
 		).lean();
 		req.session.user = updatedUser;
+		req.flash("success", "Success to update account.");
 		return res.redirect("/users/edit");
 	} catch (err) {
 		console.error("[ERROR/DB] Profile Update Error: ", err);
@@ -274,7 +286,10 @@ export const postEdit = async (req, res) => {
 /************** Change Password **************/
 
 export const getChangePassword = (req, res) => {
-	if (req.session.user.socialOnly) return res.redirect("/");
+	if (req.session.user.socialOnly) {
+		req.flash("error", "Not Authorized.");
+		return res.redirect("/");
+	}
 	return res.render("users/change-password", { pageTitle: "Change Password" });
 };
 export const postChangePassword = async (req, res) => {
@@ -308,6 +323,7 @@ export const postChangePassword = async (req, res) => {
 		// Update password
 		user.password = newPassword;
 		user.save();
+		req.flash("success", "Success to change password. Please login again.");
 		return res.redirect("/users/logout");
 	} catch (err) {
 		console.error("[ERROR/DB] Password Change Error: ", err);

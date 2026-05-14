@@ -1,3 +1,5 @@
+include mixins/toast
+
 doctype html
 html(lang="ko-KR")
   head
@@ -8,6 +10,13 @@ html(lang="ko-KR")
   body
     include partials/header
     div.container
+      if messages.error
+        +toast("error", messages.error)
+      if messages.info
+        +toast("info", messages.info)
+      if messages.success
+        +toast("success", messages.success)
+
       include partials/side-bar
       main
           block content-header

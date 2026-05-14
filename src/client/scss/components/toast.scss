@@ -1,0 +1,110 @@
+@use "../config/variables" as v;
+
+@keyframes progress-fade {
+  from {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  to {
+    transform: scaleX(0);
+    opacity: 0.5;
+  }
+}
+
+@keyframes slide-in-out {
+  0% {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+  15% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  85% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+}
+
+.toast {
+  position: fixed;
+  z-index: 999;
+  top: 2rem;
+  right: 2rem;
+  border-radius: 1rem;
+  width: 25rem;
+  overflow: hidden;
+  animation: slide-in-out 3.8s ease-in-out forwards;
+
+  &:hover {
+    animation-play-state: paused;
+    .toast-progress {
+      animation-play-state: paused;
+    }
+  }
+
+  .toast-message {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem;
+
+    img {
+      width: 3.5rem;
+      height: 3.5rem;
+    }
+  }
+
+  .toast-progress {
+    position:absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    width: 100%;
+    height: 0.5rem;
+    transform-origin: left;
+    animation: progress-fade 3s linear 0.3s forwards;
+  }
+
+  .toast-progress-background {
+    width: 100%;
+    height: 0.5rem;
+    opacity: 0.3;
+  }
+
+  &.error {
+    background-color: #EB9999;
+    border: 2px solid v.$red;
+    .toast-progress {
+      background-color: v.$red;
+    }
+    .toast-progress-background {
+      background-color: v.$red;
+    }
+  }
+  &.success {
+    background-color: #C5E19D;
+    border: 2px solid v.$green;
+    .toast-progress {
+      background-color: v.$green;
+    }
+    .toast-progress-background {
+      background-color: v.$green;
+    }
+  }
+  &.info {
+    background-color: #9BBFEE;
+    border: 2px solid v.$blue;
+    .toast-progress {
+      background-color: v.$blue;
+    }
+    .toast-progress-background {
+      background-color: v.$blue;
+    }
+  }
+}

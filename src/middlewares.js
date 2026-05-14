@@ -11,12 +11,20 @@ export const localsMiddleware = (req, res, next) => {
 };
 
 export const userOnlyMiddleware = (req, res, next) => {
-	if (req.session.loggedIn) return next();
-	else return res.redirect("/login");
+	if (req.session.loggedIn) {
+		return next();
+	} else {
+		req.flash("error", "Not authorized. Please Login");
+		return res.redirect("/login");
+	}
 };
 export const publicOnlyMiddleware = (req, res, next) => {
-	if (!req.session.loggedIn) return next();
-	else return res.redirect("/");
+	if (!req.session.loggedIn) {
+		return next();
+	} else {
+		req.flash("error", "Not authorized.");
+		return res.redirect("/");
+	}
 };
 
 export const avatarUploader = multer({ dest: "uploads/avatar/", limits: { fileSize: 3_000_000 } });
