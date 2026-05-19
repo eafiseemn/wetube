@@ -273,7 +273,7 @@ export const deleteComment = async (req, res) => {
 		session: { user },
 	} = req;
 	try {
-		const commentToDelete = await Comment.findById(commentId).select("owner");
+		const commentToDelete = await Comment.findById(commentId).select("owner video");
 
 		if (!commentToDelete) {
 			return res.status(404).json({ errorMsg: "Failed to find comment." });
@@ -283,7 +283,7 @@ export const deleteComment = async (req, res) => {
 		}
 
 		await Comment.findByIdAndDelete(commentId);
-		await Video.findByIdAndUpdate(commentId.video, {
+		await Video.findByIdAndUpdate(commentToDelete.video, {
 			$pull: { comments: commentId },
 		});
 

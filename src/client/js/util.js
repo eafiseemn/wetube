@@ -16,7 +16,7 @@ export const createToast = (type, message) => {
 	const toastProgress = document.createElement("div");
 	toastProgress.className = "toast-progress";
 	const toastBackground = document.createElement("div");
-	toastProgress.className = "toast-progress-background";
+	toastBackground.className = "toast-progress-background";
 
 	toast.appendChild(messageDiv);
 	toast.appendChild(toastProgress);
@@ -24,9 +24,15 @@ export const createToast = (type, message) => {
 
 	document.body.appendChild(toast);
 
-	setTimeout(() => {
-		document.body.removeChild(toast);
-	}, 60000);
+	let timeoutId;
+	const startTimer = () => {
+		timeoutId = setTimeout(() => {
+			toast.remove();
+		}, 6000);
+	};
+	const pauseTimer = () => clearTimeout(timeoutId);
+	toast.addEventListener("mouseover", pauseTimer);
+	toast.addEventListener("mouseleave", startTimer);
 };
 
 export const createFakeComment = (comment, parent) => {
