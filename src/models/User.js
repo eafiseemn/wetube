@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema(
 		socialOnly: { type: Boolean, required: true, default: false },
 		location: String,
 		videos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Video" }],
+		comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
 	},
 	{
 		timestamps: true,

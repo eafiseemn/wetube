@@ -1,5 +1,6 @@
 import User from "../models/User";
 import Video from "../models/Video";
+import Comment from "../models/Comment";
 const regexId = /^[0-9a-f]{24}$/;
 
 /************** Home **************/
@@ -43,7 +44,16 @@ export const watch = async (req, res) => {
 			.render("404", { pageTitle: "Page Not Found", errorMsg: "Wrong Address" });
 	}
 	try {
-		const video = await Video.findById(id).populate("owner");
+		const video = await Video.findById(id)
+			.populate("owner")
+			.populate({
+				path: "comments",
+				populate: {
+					path: "owner",
+					model: "User",
+					select: "username nickname avatarUrl",
+				},
+			});
 		if (!video) throw new Error("No video found match to this ID");
 		return res.render("videos/watch", { pageTitle: video.title, video });
 	} catch (err) {
@@ -205,6 +215,7 @@ export const remove = async (req, res) => {
 };
 
 /************** View Count **************/
+
 export const registerView = async (req, res) => {
 	const videoId = req.params.id;
 	if (!regexId.test(videoId)) {
@@ -220,4 +231,65 @@ export const registerView = async (req, res) => {
 	video.meta.views += 1;
 	await video.save();
 	return res.sendStatus(200);
+};
+
+/************** Add Comment **************/
+
+export const createComment = async (req, res) => {
+	const {
+		params: { id: videoId },
+		body: { content },
+		session: { user },
+	} = req;
+
+	if (!regexId.test(videoId)) {
+		console.error("[ERROR/DB] Search Video Error: regex test failed");
+		return res.status(404).json({ errorMsg: "Failed to find video." });
+	}
+	try {
+		const video = await Video.findById(videoId);
+		if (!video) {
+			console.error("[ERROR/DB] Find Video Error: ", err._message || err.message);
+			return res.status(404).json({ errorMsg: "Failed to find video." });
+		}
+		const comment = await Comment.create({
+			content,
+			owner: user._id,
+			video: videoId,
+		});
+		video.comments.push(comment._id);
+		await video.save();
+		return res.status(201).json({ newComment: comment });
+	} catch (err) {
+		console.error("[ERROR/DB] Create Comment Error: ", err._message || err.message);
+		return res.status(500).json({ errorMsg: "Failed to create a comment." });
+	}
+};
+
+/************** Delete Comment **************/
+export const deleteComment = async (req, res) => {
+	const {
+		params: { id: commentId },
+		session: { user },
+	} = req;
+	try {
+		const commentToDelete = await Comment.findById(commentId).select("owner");
+
+		if (!commentToDelete) {
+			return res.status(404).json({ errorMsg: "Failed to find comment." });
+		}
+		if (String(commentToDelete.owner) !== user._id) {
+			return res.status(403).json({ errorMsg: "Not authorized." });
+		}
+
+		await Comment.findByIdAndDelete(commentId);
+		await Video.findByIdAndUpdate(commentId.video, {
+			$pull: { comments: commentId },
+		});
+
+		return res.sendStatus(200);
+	} catch (err) {
+		console.error("[ERROR/DB] Comment Delete Error: ", err);
+		return res.status(404).json({ errorMsg: "Failed to find comment." });
+	}
 };

@@ -1,5 +1,6 @@
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile, toBlobURL } from "@ffmpeg/util";
+import { createToast } from "./util";
 
 const showPreviewBtn = document.getElementById("show-preview");
 const videoPreview = document.getElementById("video-preview");
@@ -55,18 +56,25 @@ const initPreview = async () => {
 		console.error("[ERROR] Media devices access error: ", err.name);
 		switch (err.name) {
 			case "NotAllowedError":
-				alert("Please allow access to your camera and microphone to start recording.");
+				createToast(
+					"error",
+					"Please allow access to your camera and microphone to start recording.",
+				);
 				break;
 			case "NotFoundError":
-				alert("Could not find a camera or microphone on this device.");
+				createToast("error", "Could not find a camera or microphone on this device.");
 				break;
 			case "NotReadableError":
-				alert(
+				createToast(
+					"error",
 					"Your camera or microphone is already in use by another application. Please close other apps and try again.",
 				);
 				break;
 			default:
-				alert("Something went wrong while accessing your media devices. Please try again.");
+				createToast(
+					"error",
+					"Something went wrong while accessing your media devices. Please try again.",
+				);
 		}
 	}
 };
@@ -83,7 +91,7 @@ const startRecord = (stream) => {
 		recorder = new MediaRecorder(stream, { mimeType: selectedType });
 	} else {
 		console.error("[ERROR] Media recorder codec type issue");
-		alert("No supported video codec found");
+		createToast("error", "No supported video codec found");
 		return;
 	}
 
@@ -258,7 +266,7 @@ const handleDownload = async () => {
 		downloadFile(thumbUrl, "jpg");
 	} catch (err) {
 		console.error("[ERROR] FFMPEG Video Processing Failed: ", err);
-		alert("Video processing failed. Please try again.");
+		createToast("error", "Video processing failed. Please try again.");
 	} finally {
 		// ffmpeg & object url cleanup
 		try {

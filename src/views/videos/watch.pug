@@ -1,4 +1,5 @@
 extends ../layout
+include ../mixins/comments
 
 block content-header
 block content
@@ -35,6 +36,8 @@ block content
           each hashtag in video.hashtags
             li=hashtag
         p=video.description
+  +comments(video.comments)
 block scripts 
   script(src="/static/js/videoPlayer.js")
+  script(src="/static/js/comments.js")
 

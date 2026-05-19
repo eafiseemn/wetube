@@ -1,0 +1,124 @@
+@use "../config/variables" as v;
+
+.comment-section {
+  width: 80%;
+  margin: 0 auto;
+  
+  strong {
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    &::after {
+      content: "";
+      flex: 1;
+      height: 2px;
+      background-color: v.$tertiary;
+    }
+  }
+
+  .comment--add-new {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 1rem;
+
+    img.comment--user-avatar {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+    }
+    
+    #commentForm {
+      width: 100%;
+      padding: 0;
+
+      textarea {
+        resize: none;
+      }
+  
+      .comment--add-buttons {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 1rem;
+        
+        .cancelBtn, .submitBtn {
+          width: 20%;
+          font-size: 1rem;
+          padding: 0.8rem 1rem;
+
+          &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            pointer-events: none;
+          }
+        }
+      }
+    }
+  }
+
+
+  .comment--list {
+    li {
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+      gap: 1rem;
+      min-height: 6rem;
+      padding: 0.5rem;
+
+      &:hover {
+        background-color: v.$red-bg;
+        border-radius: 1rem;
+      }
+  
+      .comment--user-avatar {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+      }
+
+      .comment--main {
+        flex: 1;
+      }
+
+      .comment--meta-info {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        span {
+          display: block;
+          font-size: 0.8rem;
+        }
+        .comment--user-nickname {
+          font-weight: 700;
+        }
+        .comment--date {
+          color: v.$secondary;
+        }
+      }
+      .comment--content {
+        white-space: pre-wrap;
+      }
+      .deleteBtn {
+        cursor: pointer;
+        background: transparent;
+        border: none;
+        margin: 1rem 1rem 0 0;
+        padding: 0.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        
+        &:hover {
+          border-radius: 50%;
+          background-color: v.$quaternary;
+        }
+      }
+    }
+  }
+   
+}

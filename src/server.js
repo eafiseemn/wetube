@@ -17,6 +17,7 @@ app.use(logger);
 
 // Form Middleware
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // Html Renderer
 app.set("view engine", "pug");

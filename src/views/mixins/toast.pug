@@ -1,7 +1,7 @@
 mixin toast(type, message)
   div(role="alert", class=type).toast
     .toast-message
-      img(src=`/assets/${type}.svg`, alt="" aria-labelledby="message")
+      img(src=`/assets/${type}.svg`, alt="")
       strong#message=message
     .toast-progress
     .toast-progress-background
