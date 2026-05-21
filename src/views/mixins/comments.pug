@@ -21,6 +21,6 @@ mixin comments(comments)
               span.comment--user-nickname=comment.owner.nickname
               span.comment--date=comment.formattedDate
             p.comment--content=comment.content
-          if comment.owner.username === loggedInUser.username
+          if loggedIn && comment.owner.username === loggedInUser.username
             button(type="button").deleteBtn
               img(src="/assets/delete.svg", alt="Delete")
