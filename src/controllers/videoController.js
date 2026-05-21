@@ -266,7 +266,39 @@ export const createComment = async (req, res) => {
 	}
 };
 
+/************** Edit Comment **************/
+
+export const editComment = async (req, res) => {
+	const {
+		params: { id: commentId },
+		body: { newContent },
+		session: { user },
+	} = req;
+
+	try {
+		const commentToUpdate = await Comment.findById(commentId);
+
+		if (!commentToUpdate) {
+			console.error("[ERROR/DB] Find Comment Error: ", err._message || err.message);
+			return res.status(404).json({ errorMsg: "Failed to find comment." });
+		}
+		if (String(commentToUpdate.owner) !== user._id) {
+			return res.status(403).json({ errorMsg: "Not authorized." });
+		}
+		if (commentToUpdate.content === newContent) {
+			return res.status(400).json({ errorMsg: "No change were made." });
+		}
+
+		await Comment.findByIdAndUpdate(commentId, { content: newContent });
+		return res.status(200).json({ success: true });
+	} catch (err) {
+		console.error("[ERROR/DB] Edit Comment Error: ", err._message || err.message);
+		return res.status(500).json({ errorMsg: "Failed to edit a comment." });
+	}
+};
+
 /************** Delete Comment **************/
+
 export const deleteComment = async (req, res) => {
 	const {
 		params: { id: commentId },

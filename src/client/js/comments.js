@@ -1,4 +1,4 @@
-import { createConfirm, createFakeComment, createToast } from "./util";
+import { createCommentForm, createConfirm, createFakeComment, createToast } from "./util";
 
 const videoContainer = document.getElementById("video-container");
 const loggedInUser = document.querySelector(".comment--user-avatar");
@@ -25,6 +25,9 @@ const handleInput = (e) => {
 
 const handleSubmit = async (e) => {
 	e.preventDefault();
+	submitBtn.disabled = true;
+	submitBtn.innerText = "Saving..";
+
 	const content = textarea.value;
 	if (content.trim() === "") return;
 	const videoId = videoContainer.dataset.id;
@@ -35,9 +38,10 @@ const handleSubmit = async (e) => {
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({ content }),
 		});
-		const { newComment } = await response.json();
+		const json = await response.json();
 
 		if (response.status === 201) {
+			const { newComment } = json;
 			newComment.owner = {
 				avatarUrl: loggedInUser.dataset.avatar,
 				nickname: loggedInUser.dataset.nickname,
@@ -50,17 +54,21 @@ const handleSubmit = async (e) => {
 			submitBtn.disabled = true;
 		} else {
 			createToast("error", json.errorMsg || "Failed to create comment.");
+			submitBtn.disabled = false;
+			submitBtn.innerText = "Comment";
 		}
 	} catch (err) {
 		console.error("[ERROR] Comment Fetch Error: ", err);
 		createToast("error", "Something went wrong. Please try again later.");
+		submitBtn.disabled = false;
+		submitBtn.innerText = "Comment";
 	}
 };
 
 const handleCancel = async () => {
 	const cancelOk = await createConfirm(
 		"Are You Sure? All Changes will be discarded",
-		"Cancel Edit",
+		"Cancel Comment",
 		"Keep Edit",
 	);
 	if (!cancelOk) return;
@@ -69,11 +77,96 @@ const handleCancel = async () => {
 	submitBtn.disabled = true;
 };
 
+/************** Edit Comment **************/
+
+const handleEdit = async (e) => {
+	const li = e.target.closest("li");
+	const commentMain = li.querySelector(".comment--main");
+	const commentButtons = li.querySelector(".comment--edit-buttons");
+	const commentarea = li.querySelector(".comment--content");
+	const oldContent = commentarea.innerText;
+
+	commentMain.classList.add("hidden");
+	commentButtons.classList.add("hidden");
+
+	if (li.querySelector(".comment--add-new")) return;
+	const { formDiv, form, textarea, cancelBtn, submitBtn } = createCommentForm(oldContent, li);
+
+	const handleEditInput = (e) => {
+		const { value } = e.target;
+		if (value.trim() === "") {
+			submitBtn.disabled = true;
+			return;
+		}
+		if (value.trim() === oldContent) {
+			submitBtn.disabled = true;
+		} else {
+			submitBtn.disabled = false;
+		}
+	};
+
+	const handleEditCancel = async () => {
+		const cancelOk = await createConfirm(
+			"Are You Sure? All Changes will be discarded",
+			"Cancel Edit",
+			"Keep Edit",
+		);
+		if (!cancelOk) return;
+		formDiv.remove();
+		commentMain.classList.remove("hidden");
+		commentButtons.classList.remove("hidden");
+	};
+
+	const handleEditSubmit = async (e) => {
+		e.preventDefault();
+		submitBtn.disabled = true;
+		submitBtn.innerText = "Saving..";
+		const newContent = textarea.value;
+		if (newContent.trim() === "") return;
+		if (newContent.trim() === oldContent) return;
+		const commentId = li.dataset.id;
+
+		try {
+			const response = await fetch(`/api/videos/comment/${commentId}`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ newContent }),
+			});
+			const json = await response.json();
+
+			if (response.status === 200) {
+				commentMain.classList.remove("hidden");
+				commentButtons.classList.remove("hidden");
+				commentarea.innerText = newContent;
+				formDiv.remove();
+				createToast("success", "Success to add comment.");
+			} else {
+				createToast("error", json.errorMsg || "Failed to create comment.");
+				submitBtn.disabled = false;
+				submitBtn.innerText = "Edit";
+			}
+		} catch (err) {
+			console.error("[ERROR] Comment Fetch Error: ", err);
+			createToast("error", "Something went wrong. Please try again later.");
+			submitBtn.disabled = false;
+			submitBtn.innerText = "Edit";
+		}
+	};
+
+	textarea.addEventListener("input", handleEditInput);
+	textarea.addEventListener("keydown", async (e) => {
+		if (e.key === "Escape") {
+			e.preventDefault();
+			await handleEditCancel();
+		}
+	});
+	cancelBtn.addEventListener("click", handleEditCancel);
+	form.addEventListener("submit", handleEditSubmit);
+};
+
 /************** Delete Comment **************/
 
 const handleDelete = async (e) => {
-	if (!e.target.closest("button")?.classList.contains("deleteBtn")) return;
-
 	const ok = await createConfirm("Are You Sure? This action cannot be undone.", "Delete");
 	if (!ok) return;
 
@@ -122,6 +215,21 @@ commentItems.forEach((li) => {
 /************** Event Listeners **************/
 
 textarea?.addEventListener("input", handleInput);
+textarea?.addEventListener("keydown", async (e) => {
+	if (e.key === "Escape") {
+		e.preventDefault();
+		await handleCancel();
+	}
+});
 commentForm?.addEventListener("submit", handleSubmit);
 cancelBtn?.addEventListener("click", handleCancel);
-commentList.addEventListener("click", handleDelete);
+commentList.addEventListener("click", async (e) => {
+	const clickBtn = e.target.closest("button");
+	if (!clickBtn) return;
+	if (clickBtn.classList.contains("deleteBtn")) {
+		await handleDelete(e);
+	}
+	if (clickBtn.classList.contains("editBtn")) {
+		await handleEdit(e);
+	}
+});

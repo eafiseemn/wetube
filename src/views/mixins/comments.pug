@@ -9,8 +9,8 @@ mixin comments(comments)
         form.comment--add-form#commentForm
           textarea#comment(name="comment", placeholder="Add a comment.")
           .comment--add-buttons
-            button(type="button", disabled=true).cancelBtn CANCEL
-            button(type="submit", disabled=true).submitBtn COMMENT
+            button(type="button", disabled=true).cancelBtn Cancel
+            button(type="submit", disabled=true).submitBtn Comment
 
     ul.comment--list
       each comment in comments.reverse()
@@ -23,5 +23,8 @@ mixin comments(comments)
             p.comment--content.collapsed=comment.content
             button(type="button").comment--expand.hidden Read More
           if loggedIn && comment.owner.username === loggedInUser.username
-            button(type="button").deleteBtn
-              img(src="/assets/delete.svg", alt="Delete")
+            .comment--edit-buttons
+              button(type="button").editBtn
+                img(src="/assets/edit.svg", alt="Edit")
+              button(type="button").deleteBtn
+                img(src="/assets/delete.svg", alt="Delete")

@@ -22,6 +22,7 @@
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
+    flex: 1;
     gap: 1rem;
 
     img.comment--user-avatar {
@@ -30,7 +31,7 @@
       border-radius: 50%;
     }
     
-    #commentForm {
+    .comment--add-form {
       width: 100%;
       padding: 0;
 
@@ -127,15 +128,24 @@
         }
       }
 
-      .deleteBtn {
+      .comment--edit-buttons {
+        display: flex;
+        gap: 0.1rem;
+      }
+
+      .deleteBtn, .editBtn {
         cursor: pointer;
         background: transparent;
         border: none;
-        margin: 1rem 1rem 0 0;
-        padding: 0.5rem;
+        margin: 0.5rem 0.5rem 0 0;
+        padding: 0.3rem;
         display: flex;
         justify-content: center;
         align-items: center;
+        img {
+          width: 1.1rem;
+          height: 1.1rem;
+        }
         
         &:hover {
           border-radius: 50%;
@@ -145,4 +155,7 @@
     }
   }
    
+  .hidden {
+    display: none !important;
+  }
 }
