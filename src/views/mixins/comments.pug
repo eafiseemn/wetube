@@ -20,7 +20,8 @@ mixin comments(comments)
             .comment--meta-info
               span.comment--user-nickname=comment.owner.nickname
               span.comment--date=comment.formattedDate
-            p.comment--content=comment.content
+            p.comment--content.collapsed=comment.content
+            button(type="button").comment--expand.hidden Read More
           if loggedIn && comment.owner.username === loggedInUser.username
             button(type="button").deleteBtn
               img(src="/assets/delete.svg", alt="Delete")

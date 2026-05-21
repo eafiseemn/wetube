@@ -60,7 +60,6 @@
     }
   }
 
-
   .comment--list {
     li {
       display: flex;
@@ -102,7 +101,32 @@
       }
       .comment--content {
         white-space: pre-wrap;
+        line-height: 1.5;
+
+        &.collapsed {
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
       }
+
+      button.comment--expand {
+        border: none;
+        background: none;
+        color: v.$blue;
+        font-family: v.$body-font;
+        font-weight: 600;
+        padding: 0;
+        margin: 1rem 0;
+        cursor: pointer;
+
+        &.hidden {
+          display: none;
+        }
+      }
+
       .deleteBtn {
         cursor: pointer;
         background: transparent;

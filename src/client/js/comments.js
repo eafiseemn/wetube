@@ -7,7 +7,10 @@ const textarea = commentForm?.querySelector("textarea");
 const cancelBtn = commentForm?.querySelector(".cancelBtn");
 const submitBtn = commentForm?.querySelector(".submitBtn");
 const commentList = document.querySelector(".comment--list");
+const commentItems = commentList.querySelectorAll("li");
 const commentCount = document.querySelector(".comment--count");
+
+/************** Add Comment **************/
 
 const handleInput = (e) => {
 	const { value } = e.target;
@@ -66,6 +69,8 @@ const handleCancel = async () => {
 	submitBtn.disabled = true;
 };
 
+/************** Delete Comment **************/
+
 const handleDelete = async (e) => {
 	if (!e.target.closest("button")?.classList.contains("deleteBtn")) return;
 
@@ -93,6 +98,28 @@ const handleDelete = async (e) => {
 		createToast("error", err.message || "Something went wrong. Please try again later.");
 	}
 };
+
+/************** Collapse/Expand Comments **************/
+
+commentItems.forEach((li) => {
+	const content = li.querySelector(".comment--content");
+	const expandBtn = li.querySelector(".comment--expand");
+
+	if (content.scrollHeight > content.clientHeight) {
+		expandBtn.classList.remove("hidden");
+	}
+
+	expandBtn.addEventListener("click", () => {
+		content.classList.toggle("collapsed");
+		if (content.classList.contains("collapsed")) {
+			expandBtn.innerText = "Read More";
+		} else {
+			expandBtn.innerText = "Collapse";
+		}
+	});
+});
+
+/************** Event Listeners **************/
 
 textarea?.addEventListener("input", handleInput);
 commentForm?.addEventListener("submit", handleSubmit);
