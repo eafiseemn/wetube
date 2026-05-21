@@ -12,10 +12,11 @@
 @use "./components/divider.scss";
 @use "./components/error-mixin.scss";
 @use "./components/shared.scss";
-@use "./components/videoPlayer.scss";
-@use "./components/videoPreview.scss";
+@use "./components/video-player.scss";
+@use "./components/video-preview.scss";
 @use "./components/toast.scss";
 @use "./components/comments.scss";
+@use "./components/confirm-modal.scss";
 
 // Pages
 @use "./screens/home.scss";

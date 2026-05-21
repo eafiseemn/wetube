@@ -1,0 +1,48 @@
+@use "../config/variables" as v;
+
+.confirm-modal {
+  width: 30rem;
+  height: 12rem;
+  padding: 0;
+  background-color: white;
+  border: 1px solid v.$quaternary;
+  border: none;
+  border-radius: 1rem;
+  box-shadow: 0 0 5px 2px rgba(v.$primary, 0.6);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  
+  &::backdrop {
+    background-color: rgba(v.$primary, 0.5);
+    backdrop-filter: blur(4px);
+  }
+
+  .confirm-message {
+    flex: 1;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .confirm-modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    button {
+      border: none;
+      width: 50%;
+      height: 3rem;
+      font-size: 1.2rem;
+      font-family: v.$header-font;
+    }
+
+    .confirmBtn {
+      background-color: v.$red;
+      color: white;
+    }
+  }
+}

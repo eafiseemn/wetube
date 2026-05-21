@@ -1,4 +1,4 @@
-import { createFakeComment, createToast } from "./util";
+import { createConfirm, createFakeComment, createToast } from "./util";
 
 const videoContainer = document.getElementById("video-container");
 const loggedInUser = document.querySelector(".comment--user-avatar");
@@ -54,8 +54,12 @@ const handleSubmit = async (e) => {
 	}
 };
 
-const handleCancel = () => {
-	const cancelOk = confirm("Are You Sure? All Changes will be discarded");
+const handleCancel = async () => {
+	const cancelOk = await createConfirm(
+		"Are You Sure? All Changes will be discarded",
+		"Cancel Edit",
+		"Keep Edit",
+	);
 	if (!cancelOk) return;
 	textarea.value = "";
 	cancelBtn.disabled = true;
@@ -65,7 +69,7 @@ const handleCancel = () => {
 const handleDelete = async (e) => {
 	if (!e.target.closest("button")?.classList.contains("deleteBtn")) return;
 
-	const ok = confirm("Are You Sure? This action cannot be undone.");
+	const ok = await createConfirm("Are You Sure? This action cannot be undone.", "Delete");
 	if (!ok) return;
 
 	const commentLi = e.target.closest("li");

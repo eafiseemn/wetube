@@ -83,3 +83,42 @@ export const createFakeComment = (comment, parent) => {
 
 	parent.prepend(li);
 };
+
+export const createConfirm = (message, okText, closeText = "Cancel") => {
+	return new Promise((resolve) => {
+		const dialog = document.createElement("dialog");
+		dialog.className = "confirm-modal";
+
+		const span = document.createElement("span");
+		span.innerText = message;
+		span.className = "confirm-message";
+
+		const buttonGroups = document.createElement("div");
+		buttonGroups.className = "confirm-modal-buttons";
+		const closeBtn = document.createElement("button");
+		closeBtn.className = "closeBtn";
+		closeBtn.innerText = closeText;
+		const confirmBtn = document.createElement("button");
+		confirmBtn.className = "confirmBtn";
+		confirmBtn.innerText = okText;
+		buttonGroups.appendChild(closeBtn);
+		buttonGroups.appendChild(confirmBtn);
+
+		dialog.appendChild(span);
+		dialog.appendChild(buttonGroups);
+
+		document.body.appendChild(dialog);
+		dialog.showModal();
+
+		closeBtn.addEventListener("click", () => {
+			dialog.close();
+			resolve(false);
+		});
+		confirmBtn.addEventListener("click", () => {
+			dialog.close();
+			resolve(true);
+		});
+
+		dialog.addEventListener("close", () => dialog.remove());
+	});
+};

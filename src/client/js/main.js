@@ -1,9 +1,14 @@
 import "../scss/styles.scss";
+import { createConfirm } from "./util";
 
 // Cancel Edit Video
 const cancelEditBtn = document.querySelector(".cancelEditBtn");
-const handleCancelEdit = () => {
-	const cancelOk = confirm("Are You Sure? All Changes will be discarded");
+const handleCancelEdit = async () => {
+	const cancelOk = await createConfirm(
+		"Are You Sure? All Changes will be discarded",
+		"Cancel Edit",
+		"Keep Edit",
+	);
 	if (!cancelOk) return;
 	if (document.referrer) {
 		history.back();
@@ -18,9 +23,9 @@ if (cancelEditBtn) {
 
 // Confirm to Delete Video
 const deleteVideoAnchor = document.querySelector(".deleteVideo");
-const handleDeleteVideo = (e) => {
+const handleDeleteVideo = async (e) => {
 	e.preventDefault();
-	const ok = confirm("Are You Sure? This action cannot be undone.");
+	const ok = await createConfirm("Are You Sure? This action cannot be undone.", "Delete");
 	if (!ok) return;
 	const targetUrl = e.target.href;
 	location.href = targetUrl;
