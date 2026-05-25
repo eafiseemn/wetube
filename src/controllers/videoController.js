@@ -1,6 +1,7 @@
 import User from "../models/User";
 import Video from "../models/Video";
 import Comment from "../models/Comment";
+import { deleteS3File } from "../middlewares";
 const regexId = /^[0-9a-f]{24}$/;
 
 /************** Home **************/
@@ -82,8 +83,8 @@ export const postUpload = async (req, res) => {
 		const newVideo = await Video.create({
 			title,
 			description,
-			fileUrl: video[0].path,
-			thumbUrl: thumbnail[0].path,
+			fileUrl: video[0].location,
+			thumbUrl: thumbnail[0].location,
 			owner: userId,
 			hashtags: Video.formatHashtags(hashtags),
 		});
@@ -194,7 +195,7 @@ export const remove = async (req, res) => {
 		},
 	} = req;
 	try {
-		const videoToDelete = await Video.findById(videoId).select("owner");
+		const videoToDelete = await Video.findById(videoId).select("owner fileUrl thumbUrl");
 		if (!videoToDelete) {
 			return res
 				.status(404)
@@ -205,6 +206,10 @@ export const remove = async (req, res) => {
 			return res.status(403).redirect("/");
 		}
 		await Video.findByIdAndDelete(videoId);
+
+		if (videoToDelete.fileUrl) await deleteS3File(videoToDelete.fileUrl);
+		if (videoToDelete.thumbUrl) await deleteS3File(videoToDelete.thumbUrl);
+
 		req.flash("success", "Success to delete video.");
 		return res.redirect("/");
 	} catch (err) {

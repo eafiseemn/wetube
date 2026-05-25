@@ -1,5 +1,9 @@
+import { deleteS3File } from "../middlewares";
 import User from "../models/User";
 import bcrypt from "bcrypt";
+
+const DEFAULT_AVATAR_URL =
+	"https://wetube-media-assets-storage-2026.s3.ap-southeast-2.amazonaws.com/avatars/defaultAvatar.png";
 
 /************** Join **************/
 
@@ -48,7 +52,7 @@ export const postJoin = async (req, res) => {
 			email,
 			password,
 			location,
-			avatarUrl: "uploads/avatar/5475dddc9eef38ed98de61d8ab471d23",
+			avatarUrl: DEFAULT_AVATAR_URL,
 		});
 		req.flash("success", "Success to create an account. Please login.");
 		return res.redirect("/login");
@@ -268,9 +272,10 @@ export const postEdit = async (req, res) => {
 		// Update Account
 		const updatedUser = await User.findByIdAndUpdate(
 			id,
-			{ username, nickname, email, location, avatarUrl: file ? file.path : oldAvatarUrl },
+			{ username, nickname, email, location, avatarUrl: file ? file.location : oldAvatarUrl },
 			{ returnDocument: "after" },
 		).lean();
+		if (file && oldAvatarUrl !== DEFAULT_AVATAR_URL) await deleteS3File(oldAvatarUrl);
 		req.session.user = updatedUser;
 		req.flash("success", "Success to update account.");
 		return res.redirect("/users/edit");

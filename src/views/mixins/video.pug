@@ -5,7 +5,7 @@ mixin video(item)
     div.video-info
       if (!currentPath.startsWith("/users/profile"))
           a(href=`/users/profile/${item.owner.username}`).video-owner-link
-            img.header--user-avatar(src=item.owner.avatarUrl.startsWith("http") ? item.owner.avatarUrl : `/${item.owner.avatarUrl}`, alt=`${item.owner.username}'s channel`).video-owner-avatar
+            img.header--user-avatar(src=item.owner.avatarUrl, alt=`${item.owner.username}'s channel`).video-owner-avatar
       div
         h4.video-title=item.title 
         div.video-meta

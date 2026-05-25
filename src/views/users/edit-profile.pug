@@ -17,7 +17,7 @@ block content
         label(for="location") Location 
         input(id="location", name="location", type="text", placeholder="Location", value=oldData ? oldData.location :loggedInUser.location)
       div.edit-avatar
-        img(src=loggedInUser.avatarUrl.startsWith("http") ? loggedInUser.avatarUrl : `/${loggedInUser.avatarUrl}`, alt="My Avatar", height="100", width="100").current-avatar
+        img(src=loggedInUser.avatarUrl, alt="My Avatar", height="100", width="100").current-avatar
         div.file-input-box
           input.upload-file-name(value="Upload avatar file")
           label(for="avatar") Select File

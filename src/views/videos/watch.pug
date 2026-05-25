@@ -5,7 +5,7 @@ block content-header
 block content
   div.watch--main-video
     #video-container(data-id=video._id)
-      video.watch--video(src="/"+video.fileUrl)
+      video.watch--video(src=video.fileUrl)
       #video-controller
         button#play 
           img(src="/assets/pause.svg", alt="Pause")
@@ -23,7 +23,7 @@ block content
       h4.video--title=pageTitle
       div.video--owner-info
         a(href="/users/profile/"+video.owner.username)
-          img(src=video.owner.avatarUrl.startsWith("http") ? video.owner.avatarUrl : `/${video.owner.avatarUrl}`, alt=`${video.owner.nickname}'s Avatar`)
+          img(src=video.owner.avatarUrl, alt=`${video.owner.nickname}'s Avatar`)
           strong=video.owner.nickname 
         if (loggedIn && String(video.owner._id) === String(loggedInUser._id))
           div.edit-video-link

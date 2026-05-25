@@ -80,9 +80,7 @@ export const createFakeComment = (comment, parent) => {
 
 	const img = document.createElement("img");
 	img.className = "comment--user-avatar";
-	img.src = comment.owner.avatarUrl.startsWith("http")
-		? comment.owner.avatarUrl
-		: `/${comment.owner.avatarUrl}`;
+	img.src = comment.owner.avatarUrl;
 	img.alt = `${comment.owner.nickname}'s Avatar`;
 
 	const main = document.createElement("div");

@@ -13,7 +13,7 @@ header
             a(href="/users/logout") Log Out
           li 
             a(href=`/users/profile/${loggedInUser.username}`)
-              img.header--user-avatar(src=loggedInUser.avatarUrl.startsWith("http") ? loggedInUser.avatarUrl : `/${loggedInUser.avatarUrl}`, alt="My Avatar", class=(currentPath.startsWith("/users/profile/") ? "active-avatar" : ""))
+              img.header--user-avatar(src=loggedInUser.avatarUrl, alt="My Avatar", class=(currentPath.startsWith("/users/profile/") ? "active-avatar" : ""))
       else   
         li
           a(href="/join", class=(currentPath === "/join" ? "active" : "")) Join

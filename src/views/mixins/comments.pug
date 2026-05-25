@@ -5,7 +5,7 @@ mixin comments(comments)
       span #{comments.length <= 1 ? "Comment" : "Comments"}
     if loggedIn
       .comment--add-new
-        img.comment--user-avatar(src=loggedInUser.avatarUrl.startsWith("http") ? loggedInUser.avatarUrl : `/${loggedInUser.avatarUrl}`, alt="My Avatar", data-avatar=loggedInUser.avatarUrl, data-nickname=loggedInUser.nickname)
+        img.comment--user-avatar(src=loggedInUser.avatarUrl, alt="My Avatar", data-avatar=loggedInUser.avatarUrl, data-nickname=loggedInUser.nickname)
         form.comment--add-form#commentForm
           textarea#comment(name="comment", placeholder="Add a comment.")
           .comment--add-buttons
@@ -15,7 +15,7 @@ mixin comments(comments)
     ul.comment--list
       each comment in comments.reverse()
         li(data-id=comment._id)
-          img.comment--user-avatar(src=comment.owner.avatarUrl.startsWith("http") ? comment.owner.avatarUrl : `/${comment.owner.avatarUrl}`, alt=`${comment.owner.nickname}'s Avatar`)
+          img.comment--user-avatar(src=comment.owner.avatarUrl, alt=`${comment.owner.nickname}'s Avatar`)
           div.comment--main
             .comment--meta-info
               span.comment--user-nickname=comment.owner.nickname
